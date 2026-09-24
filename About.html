@@ -28,7 +28,7 @@ body {
     --nav-height: 80px;
 }
 
-/* ================= RESPONSIVE NAVBAR ================= */
+
 header {
     background: rgba(255, 255, 255, 0.98);
     backdrop-filter: blur(10px);
@@ -200,7 +200,7 @@ header.scrolled {
     top: 8px;
 }
 
-/* ================= MOBILE NAVIGATION ================= */
+
 @media (max-width: 1024px) {
     .nav-links {
         gap: 2rem;
@@ -301,7 +301,7 @@ header.scrolled {
     }
 }
 
-/* ================= MAIN CONTENT ================= */
+
 .main-content {
     padding-top: var(--nav-height);
 }
@@ -364,7 +364,6 @@ header.scrolled {
     color: #1e3a8a;
 }
 
-/* Icons with Beautiful Hover Effects */
 #icon1 {
     font-size: 36px;
     color: #ffca1e;
@@ -615,7 +614,6 @@ header.scrolled {
     transform: scale(1.1);
 }
 
-/* CTA Section */
 .cta {
     text-align: center;
     margin: 90px auto 40px;
@@ -638,7 +636,6 @@ header.scrolled {
     box-shadow: 0 8px 20px rgba(29, 78, 216, 0.2);
 }
 
-/* ================= RESPONSIVE DESIGN ================= */
 @media (max-width: 1200px) {
     .about-wrapper, .why-choose, .landscape {
         margin-left: 50px;
@@ -720,7 +717,6 @@ header.scrolled {
     }
 }
 
-/* ================= RESPONSIVE FOOTER ================= */
 footer {
     background: #111827;
     color: #d1d5db;
@@ -877,7 +873,6 @@ footer ul li a:hover {
     width: 100%;
 }
 
-/* ================= FOOTER RESPONSIVE ================= */
 @media (max-width: 1024px) {
     .footer-grid {
         gap: 30px;
@@ -967,7 +962,6 @@ footer ul li a:hover {
     }
 }
 
-/* Smooth scroll */
 html {
     scroll-behavior: smooth;
 }
@@ -988,7 +982,6 @@ html {
                 </div>
             </a>
             
-            <!-- HAMBURGER MENU -->
             <div class="hamburger-menu" id="hamburger">
                 <span></span>
                 <span></span>
@@ -1010,7 +1003,7 @@ html {
     </header>
 
     <div class="main-content">
-        <!-- HEADER -->
+      
         <section id="feedback" class="section">
             <div class="container">
                 <h2 class="section-title">About SchoolsInfo</h2>
@@ -1020,7 +1013,7 @@ html {
             </div>
 
             <div class="container">
-                <!-- EDUCATION IN KARACHI -->
+            
                 <div class="edu-section">
                     <div class="edu-image">
                         <img src="https://images.unsplash.com/photo-1759323049966-8ae3fc89c0ce?fit=max&w=1080&q=80" alt="Karachi City">
@@ -1040,7 +1033,6 @@ html {
                     </div>
                 </div>
 
-                <!-- MISSION -->
                 <div class="section-mission">
                     <h2>Our Mission & Vision</h2>
                     <div class="mission-grid">
@@ -1059,7 +1051,7 @@ html {
                     </div>
                 </div>
 
-                <!-- WHY CHOOSE -->
+  
                 <section class="why-choose">
                     <h2>Why Choose SchoolsInfo?</h2>
                     <div class="why-grid">
@@ -1096,8 +1088,7 @@ html {
                         </div>
                     </div>
                 </section>
-
-                <!-- STATS -->
+                
                 <div class="stats">
                     <div class="stats-grid">
                         <div class="stat">
@@ -1140,8 +1131,7 @@ html {
                                 </li>
                             </ul>
                         </div>
-
-                        <!-- RIGHT CARD -->
+                        
                         <div class="landscape-card2">
                             <h3>Key Locations</h3>
                             <ul class="list">
@@ -1165,7 +1155,6 @@ html {
                         </div>
                     </div>
 
-                    <!-- CTA -->
                     <div class="cta">
                         <h3>Have Questions?</h3>
                         <p>We're here to help you find the perfect school for your child in Karachi</p>
@@ -1176,7 +1165,6 @@ html {
         </section>
     </div>
 
-    <!-- ================= RESPONSIVE FOOTER ================= -->
     <footer>
         <div class="footer-grid">
             <div>
@@ -1245,7 +1233,6 @@ html {
             }
         });
 
-        // Mobile Navigation Toggle
         const hamburger = document.getElementById('hamburger');
         const navLinks = document.querySelector('.nav-links');
         
@@ -1254,7 +1241,6 @@ html {
                 this.classList.toggle('active');
                 navLinks.classList.toggle('active');
                 
-                // Prevent body scrolling when menu is open
                 if (navLinks.classList.contains('active')) {
                     document.body.style.overflow = 'hidden';
                 } else {
@@ -1272,7 +1258,6 @@ html {
                 });
             });
             
-            // Close menu when clicking outside
             document.addEventListener('click', function(e) {
                 if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) {
                     hamburger.classList.remove('active');
@@ -1281,7 +1266,6 @@ html {
                 }
             });
             
-            // Close menu on escape key
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') {
                     hamburger.classList.remove('active');
