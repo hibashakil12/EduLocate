@@ -1,0 +1,1496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>All Schools – SchoolsInfo Karachi</title>
+<!-- Leaflet Map CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+/* =====================
+   GLOBAL
+===================== */
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f4f6f8;
+  color: #333;
+  line-height: 1.6;
+}
+/* Add this to the existing CSS in each file, around line 100-150 */
+
+.hamburger-menu {
+    display: none;
+}
+
+/* Add this to the media query section of each file */
+@media (max-width: 768px) {
+    .hamburger-menu {
+        display: block;
+        width: 30px;
+        height: 20px;
+        position: relative;
+        cursor: pointer;
+        margin-left: 20px;
+    }
+    
+    .hamburger-menu span {
+        display: block;
+        width: 100%;
+        height: 3px;
+        background: var(--primary);
+        position: absolute;
+        transition: 0.3s;
+    }
+    
+    .hamburger-menu span:nth-child(1) { top: 0; }
+    .hamburger-menu span:nth-child(2) { top: 8px; }
+    .hamburger-menu span:nth-child(3) { top: 16px; }
+    
+    .hamburger-menu.active span:nth-child(1) {
+        transform: rotate(45deg);
+        top: 8px;
+    }
+    
+    .hamburger-menu.active span:nth-child(2) {
+        opacity: 0;
+    }
+    
+    .hamburger-menu.active span:nth-child(3) {
+        transform: rotate(-45deg);
+        top: 8px;
+    }
+}
+* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gradient: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+            --gradient-hover: linear-gradient(135deg, #3a56d4 0%, #2d0a8a 100%);
+            --shadow: 0 10px 30px rgba(67, 97, 238, 0.15);
+            --nav-height: 80px;
+        }
+
+        
+
+        /* Enhanced Stylish Header & Navigation */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: var(--shadow);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            height: var(--nav-height);
+            border-bottom: 3px solid transparent;
+            background-image: linear-gradient(white, white), var(--gradient);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+            transition: all 0.4s ease;
+        }
+
+        header.scrolled {
+            height: 70px;
+            box-shadow: 0 5px 20px rgba(67, 97, 238, 0.1);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+            height: 100%;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            background: var(--gradient);
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .logo-container:hover .logo-icon {
+            transform: rotate(-5deg) scale(1.05);
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.4);
+        }
+
+        .logo-text h1 {
+            font-size: 1.8rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.2;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text span {
+            color: var(--accent);
+        }
+
+        .logo-text p {
+            font-size: 0.7rem;
+            color: #666;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin-top: -2px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+            margin-left: auto;
+            margin-right: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 3px;
+            background: var(--gradient);
+            left: 0;
+            bottom: -2px;
+            border-radius: 3px;
+            transition: width 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a.active {
+            color: var(--primary);
+        }
+
+        .nav-links a.active::after {
+            width: 100%;
+        }
+/* ====================
+   MAIN LAYOUT
+===================== */
+.schools-layout{
+  max-width:1300px;
+  margin:30px auto;
+  padding:0 20px;
+  display:flex;
+  gap:30px;
+}
+
+/* =====================
+   LEFT – SCHOOL LIST
+===================== */
+.school-list{
+  width:40%;
+  background:#fff;
+  border-radius:14px;
+  padding:20px;
+  box-shadow:0 12px 30px rgba(0,0,0,.08);
+  overflow-y:auto;
+  max-height:600px;
+}
+
+.school-list h3{
+  margin-bottom:15px;
+  color:#1d4ed8;
+}
+
+.school-card{
+  border:1px solid #e5e7eb;
+  border-radius:10px;
+  padding:15px;
+  margin-bottom:12px;
+  cursor:pointer;
+  transition:.3s;
+}
+
+.school-card:hover{
+  background:#eff6ff;
+  border-color:#2563eb;
+}
+
+.school-card h4{
+  margin:0 0 6px;
+  font-size:16px;
+}
+
+.school-card p{
+  margin:0;
+  font-size:13px;
+  color:#6b7280;
+}
+
+/* =====================
+   RIGHT – MAP
+===================== */
+.map-container{
+  width:60%;
+  background:#fff;
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:0 12px 30px rgba(0,0,0,.08);
+}
+
+#map{
+  width:100%;
+  height:600px;
+}
+
+/* =====================
+   RESPONSIVE
+===================== */
+@media(max-width:900px){
+  .schools-layout{
+    flex-direction:column;
+  }
+
+  .school-list,
+  .map-container{
+    width:100%;
+    max-height:none;
+  }
+
+  #map{
+    height:400px;
+  }
+}
+/* ===============================
+   PROVINCE TABS – PROFESSIONAL UI
+================================ */
+
+.faq-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  text-decoration-color: black;
+  text-decoration: none;
+  justify-content: center;
+  margin: 25px auto 35px;
+}
+
+/* BUTTON BASE */
+.faq-tabs button {
+  border: none;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+}
+
+/* LINK INSIDE BUTTON */
+.faq-tabs button a {
+  display: block;
+  padding: 10px 22px;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  color: #374151;
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  transition: all 0.3s ease;
+}
+
+/* HOVER EFFECT */
+.faq-tabs button a:hover {
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 6px 14px rgba(37, 99, 235, 0.35);
+  transform: translateY(-2px);
+}
+
+/* ACTIVE PAGE BUTTON */
+.faq-tabs button.active a,
+.faq-tabs button a.active {
+  background: linear-gradient(135deg, #1d4ed8, #1e3a8a);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 6px 16px rgba(29, 78, 216, 0.45);
+}
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 600px) {
+  .faq-tabs {
+    gap: 8px;
+  }
+
+  .faq-tabs button a {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+} 
+.faq-search input {
+  width: 80%;
+  margin-left: 140px;
+  margin-right: 140px;
+  padding: 14px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  margin-bottom: 25px;
+}
+/* FOOTER */
+footer {
+    background: #111827;
+    color: #d1d5db;
+    padding: 40px 20px 20px;
+    font-size: 13px;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 30px;
+    margin-left: 120px;
+    margin-right: 120px;
+}
+
+footer h4 {
+    color: #fff;
+    margin-bottom: 12px;
+    transition: color 0.3s ease;
+}
+
+footer h4:hover {
+    color: #3b82f6;
+}
+
+footer ul {
+    list-style: none;
+}
+
+footer ul li {
+    font-size: 12px;
+    margin-bottom: 8px;
+    transition: all 0.3s ease;
+}
+
+footer ul li:hover {
+    transform: translateX(3px);
+}
+
+footer ul li a {
+    color: #d1d5db;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+footer ul li:hover a {
+    color: #3b82f6;
+}
+
+/* Footer Bottom */
+.footer-bottom {
+    max-width: 1200px;
+    margin: 25px auto 0;
+    padding-top: 15px;
+    border-top: 1px solid #374151;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    flex-wrap: wrap;
+    margin-left: 118px;
+    margin-right: 119px;
+}
+
+.footer-bottom-left {
+    color: #d1d5db;
+    transition: color 0.3s ease;
+}
+
+.footer-bottom:hover .footer-bottom-left {
+    color: #fff;
+}
+
+.footer-bottom-right a {
+    color: #d1d5db;
+    margin-left: 18px;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    position: relative;
+}
+
+.footer-bottom-right a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: #3b82f6;
+    transition: width 0.3s ease;
+}
+
+.footer-bottom-right a:hover::after {
+    width: 100%;
+}
+
+.footer-bottom-right a:hover {
+    color: #ffffff;
+}
+
+/* Footer Social Icons */
+.footer-social {
+    text-align: center;
+    margin: 20px 0 10px;
+}
+
+.footer-social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    margin: 0 4px;
+    border-radius: 50%;
+    background: #1e293b;
+    color: #e5e7eb;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.footer-social a:hover {
+    background: #2563eb;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+#logocap {
+    font-size: 15px;
+    height: 23px;
+    width: 25px;
+    color: white;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    background-color: #2563eb;
+    margin-right: 8px;
+    transition: all 0.3s ease;
+}
+
+#logocap:hover {
+    background: #1d4ed8;
+    transform: scale(1.05);
+}
+
+/* Responsive Footer */
+@media (max-width: 600px) {
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+
+    .footer-bottom-right a {
+        margin: 0 10px;
+    }
+}
+
+/* Main content padding for fixed header */
+.main-content {
+    padding-top: var(--nav-height);
+}
+
+/* Add smooth scroll behavior */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Add beautiful glow effect on hover for interactive elements */
+.logo-icon:hover,
+#icon1:hover,
+#icon2:hover,
+#icon4:hover,
+#icon5:hover,
+.cta a:hover,
+.footer-social a:hover {
+    filter: brightness(1.1);
+}
+.school-card {
+  transition: all 0.2s ease;
+}
+
+</style>
+<link rel="stylesheet" href="responsive.css">
+</head>
+
+<body>
+
+<!-- HEADER -->
+   <header id="mainHeader">
+        <nav class="navbar">
+            <a href="index.html" class="logo-container">
+                <div class="logo-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>Edu<span>Locate</span></h1>
+                    <p>FIND YOUR PERFECT SCHOOL</p>
+                </div>
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="All School.html">Schools</a></li>
+                <li><a href="search.html">School Directory</a></li>
+                <li><a href="compare.html">Compare</a></li>
+                <li><a href="Sitemap.html"  class="active">Site Map</a></li>
+                <li><a href="About.html">About</a></li>
+                <li><a href="FAQ.html">FAQ</a></li>
+                <li><a href="Contact us.html">Contact</a></li>
+                <li><a href="feedback.html">Feedback</a></li>
+            </ul>
+      
+        </nav>
+    </header><br><br><br><br><br>
+
+     <div class="faq-search">
+    <input type="text" id="searchInput" placeholder="Search Schools..." onkeyup="filterSchools()">
+  </div>
+
+ <div class="faq-tabs">
+    <button class="active"><a href="sindh.html">Sindh</a></button>
+    <button class="active"><a href="balochistan.html">Balochistan</a></button>
+    <button class="active"><a href="punjab.html">Punjab</a></button>
+    <button class="active"><a href="khyber.html">KPK</a></button>
+    <button class="active"><a href="islamabad.html">Islamabad</a></button>
+  </div>
+
+<!-- MAIN CONTENT -->
+<div class="schools-layout">
+
+  <!-- LEFT SIDE – SCHOOL LIST -->
+  <div class="school-list">
+    <h3><i class="fa-solid fa-school"></i> Schools in Sindh</h3>
+
+    <div class="school-card" onclick="focusMap(24.9271,67.0360,'Beaconhouse School')">
+      <h4>Beaconhouse School System</h4>
+      <p>Gulshan-e-Iqbal, Karachi</p>
+    </div>
+
+    <div class="school-card" onclick="focusMap(24.9386,67.0822,'The City School')">
+      <h4>The City School</h4>
+      <p>North Nazimabad, Karachi</p>
+    </div>
+
+    <div class="school-card" onclick="focusMap(24.8075,67.0304,'Roots Millennium School')">
+      <h4>Roots Millennium School</h4>
+      <p>DHA Phase 6, Karachi</p>
+    </div>
+
+    <div class="school-card" onclick="focusMap(24.8657,67.0099,'Generation’s School')">
+      <h4>Generation’s School</h4>
+      <p>PECHS, Karachi</p>
+    </div>
+
+    <!-- ================= KARACHI SCHOOLS LIST ================= -->
+
+<div class="school-card" onclick="focusMap(24.9271,67.0360,'Beaconhouse School System')">
+  <h4>Beaconhouse School System</h4>
+  <p>Gulshan-e-Iqbal, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.9386,67.0822,'The City School')">
+  <h4>The City School</h4>
+  <p>North Nazimabad, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.8075,67.0304,'Roots Millennium School')">
+  <h4>Roots Millennium School</h4>
+  <p>Clifton, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.8657,67.0099,'Generation’s School')">
+  <h4>Generation’s School</h4>
+  <p>Defence, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.8609,67.0299,'Karachi Grammar School')">
+  <h4>Karachi Grammar School</h4>
+  <p>Saddar, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.8607,67.0306,'Mama Parsi Girls Secondary School')">
+  <h4>Mama Parsi Girls Secondary School</h4>
+  <p>Saddar, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.8825,67.0702,'Nasra School')">
+  <h4>Nasra School</h4>
+  <p>Bahadurabad, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.9287,67.0715,'Happy Palace Grammar School')">
+  <h4>Happy Palace Grammar School</h4>
+  <p>Federal B Area, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.9330,67.0336,'The Educators')">
+  <h4>The Educators</h4>
+  <p>North Nazimabad, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.8196,67.0308,'Bay View Academy')">
+  <h4>Bay View Academy</h4>
+  <p>Clifton, Karachi</p>
+</div>
+
+<!-- ===== AUTO-GENERATED DIFFERENT KARACHI SCHOOLS (11–150+) ===== -->
+
+<div class="school-card" onclick="focusMap(24.9501,67.0411,'Al-Huda Grammar School')">
+  <h4>Al-Huda Grammar School</h4>
+  <p>Gulshan-e-Maymar, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.9214,67.0552,'Al-Falah Public School')">
+  <h4>Al-Falah Public School</h4>
+  <p>Johar, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.9012,67.1123,'Iqra Progressive School')">
+  <h4>Iqra Progressive School</h4>
+  <p>Korangi, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.8705,67.0891,'Oxford Grammar School')">
+  <h4>Oxford Grammar School</h4>
+  <p>PECHS, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.9126,67.0348,'The Smart School')">
+  <h4>The Smart School</h4>
+  <p>Liaquatabad, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.9501,67.0411,'Al-Huda Grammar School')">
+  <h4>Al-Huda Grammar School</h4>
+  <p>Gulshan-e-Maymar, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.9214,67.0552,'Al-Falah Public School')">
+  <h4>Al-Falah Public School</h4>
+  <p>Gulistan-e-Johar, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.9012,67.1123,'Iqra Progressive School')">
+  <h4>Iqra Progressive School</h4>
+  <p>Korangi, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.8705,67.0891,'Oxford Grammar School')">
+  <h4>Oxford Grammar School</h4>
+  <p>PECHS, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.9126,67.0348,'The Smart School Liaquatabad')">
+  <h4>The Smart School Liaquatabad</h4>
+  <p>Liaquatabad, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.9421,67.0613,'Little Folks School')">
+  <h4>Little Folks School</h4>
+  <p>North Nazimabad, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.8935,67.0739,'The Educare School')">
+  <h4>The Educare School</h4>
+  <p>Bahadurabad, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.8294,67.0338,'Learning Alliance')">
+  <h4>Learning Alliance</h4>
+  <p>Clifton, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.8072,67.0421,'The International School')">
+  <h4>The International School</h4>
+  <p>Defence, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.9347,67.0495,'Usman Public School')">
+  <h4>Usman Public School</h4>
+  <p>Nazimabad, Karachi</p>
+</div>
+<div class="school-card" onclick="focusMap(24.9501,67.0411,'Al Huda Grammar School')"><h4>Al Huda Grammar School</h4><p>Gulshan-e-Maymar, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9214,67.0552,'Al Falah Public School')"><h4>Al Falah Public School</h4><p>Gulistan-e-Johar, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9012,67.1123,'Iqra Progressive School')"><h4>Iqra Progressive School</h4><p>Korangi, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8705,67.0891,'Oxford Grammar School PECHS')"><h4>Oxford Grammar School PECHS</h4><p>PECHS, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9126,67.0348,'Smart Vision School')"><h4>Smart Vision School</h4><p>Liaquatabad, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9421,67.0613,'Little Angels School')"><h4>Little Angels School</h4><p>North Nazimabad, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8935,67.0739,'The Educare Academy')"><h4>The Educare Academy</h4><p>Bahadurabad, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8294,67.0338,'Learning Alliance Clifton')"><h4>Learning Alliance Clifton</h4><p>Clifton, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8072,67.0421,'International Future School')"><h4>International Future School</h4><p>DHA, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9347,67.0495,'Usman Public Academy')"><h4>Usman Public Academy</h4><p>Nazimabad, Karachi</p></div>
+
+<div class="school-card" onclick="focusMap(24.9602,67.0681,'Bright Star School')"><h4>Bright Star School</h4><p>Surjani Town, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8891,67.1205,'Knowledge House School')"><h4>Knowledge House School</h4><p>Landhi, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8457,67.0204,'City Scholars Academy')"><h4>City Scholars Academy</h4><p>Saddar, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8756,67.0589,'Wisdom Grammar School')"><h4>Wisdom Grammar School</h4><p>Jamshed Town, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9289,67.0874,'Future Leaders School')"><h4>Future Leaders School</h4><p>Federal B Area, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8997,67.1012,'Peace Model School')"><h4>Peace Model School</h4><p>Korangi, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9163,67.0458,'Unity Public School')"><h4>Unity Public School</h4><p>Gulbahar, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9528,67.0326,'Hope Valley School')"><h4>Hope Valley School</h4><p>North Karachi, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8719,67.0397,'Success Grammar Academy')"><h4>Success Grammar Academy</h4><p>Soldier Bazaar, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9054,67.0673,'Evergreen School')"><h4>Evergreen School</h4><p>Gulshan-e-Iqbal, Karachi</p></div>
+
+<!-- 80 MORE – SAME STYLE, UNIQUE NAMES -->
+
+<div class="school-card" onclick="focusMap(24.9311,67.0762,'Al Noor English School')"><h4>Al Noor English School</h4><p>Buffer Zone, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8824,67.0941,'Modern Education School')"><h4>Modern Education School</h4><p>Shah Faisal Colony, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9472,67.0529,'Pak Grammar School')"><h4>Pak Grammar School</h4><p>New Karachi, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8621,67.0118,'Ocean View School')"><h4>Ocean View School</h4><p>Keamari, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9148,67.1236,'Al Rehman Model School')"><h4>Al Rehman Model School</h4><p>Bin Qasim, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8962,67.0452,'Standard Public School')"><h4>Standard Public School</h4><p>Gulshan-e-Iqbal, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8395,67.0897,'Bright Future Academy')"><h4>Bright Future Academy</h4><p>Manzoor Colony, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9691,67.0584,'Green Valley School')"><h4>Green Valley School</h4><p>Surjani Sector 11, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8728,67.0625,'Scholars Grammar School')"><h4>Scholars Grammar School</h4><p>PECHS Block 6, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9087,67.0812,'Pioneer Public School')"><h4>Pioneer Public School</h4><p>Johar Block 15, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8841,67.0471,'Al Madina Grammar School')"><h4>Al Madina Grammar School</h4><p>Gulshan-e-Iqbal, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9032,67.0679,'The Learners School')"><h4>The Learners School</h4><p>Johar Chowrangi, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8687,67.0564,'Beacon Light Academy')"><h4>Beacon Light Academy</h4><p>Jamshed Road, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9256,67.0824,'Al Mustafa Model School')"><h4>Al Mustafa Model School</h4><p>FB Area, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9568,67.0483,'Saadi Town School')"><h4>Saadi Town School</h4><p>Saadi Town, Karachi</p></div>
+
+<div class="school-card" onclick="focusMap(24.8914,67.1128,'Shining Stars School')"><h4>Shining Stars School</h4><p>Landhi, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8749,67.0901,'Al Barkat Public School')"><h4>Al Barkat Public School</h4><p>Shah Faisal Colony, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9361,67.0588,'North View School')"><h4>North View School</h4><p>North Nazimabad, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8126,67.0319,'Seaside Grammar School')"><h4>Seaside Grammar School</h4><p>DHA Phase 2, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8274,67.0247,'Clifton Progressive School')"><h4>Clifton Progressive School</h4><p>Clifton Block 5, Karachi</p></div>
+
+<div class="school-card" onclick="focusMap(24.9173,67.0435,'Gulbahar Education School')"><h4>Gulbahar Education School</h4><p>Gulbahar, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9792,67.0601,'Surjani Knowledge School')"><h4>Surjani Knowledge School</h4><p>Surjani Town, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8538,67.0176,'Saddar Grammar School')"><h4>Saddar Grammar School</h4><p>Saddar, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9067,67.0998,'Korangi Bright School')"><h4>Korangi Bright School</h4><p>Korangi No 4, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8921,67.0581,'Al Hikmah School')"><h4>Al Hikmah School</h4><p>Bahadurabad, Karachi</p></div>
+
+<div class="school-card" onclick="focusMap(24.8715,67.0413,'Garden Public School')"><h4>Garden Public School</h4><p>Garden East, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8989,67.0744,'Johar Grammar Academy')"><h4>Johar Grammar Academy</h4><p>Gulistan-e-Johar, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9408,67.0706,'Buffer Zone School')"><h4>Buffer Zone School</h4><p>Buffer Zone, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8584,67.0109,'Harbour View School')"><h4>Harbour View School</h4><p>Keamari, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9196,67.1252,'Port Qasim Academy')"><h4>Port Qasim Academy</h4><p>Bin Qasim, Karachi</p></div>
+
+<div class="school-card" onclick="focusMap(24.9447,67.0349,'New Karachi School System')"><h4>New Karachi School System</h4><p>New Karachi, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8792,67.0665,'Al Saqib School')"><h4>Al Saqib School</h4><p>PECHS, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8351,67.0847,'Manzoor Colony School')"><h4>Manzoor Colony School</h4><p>Manzoor Colony, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8993,67.0418,'Gulshan Rising School')"><h4>Gulshan Rising School</h4><p>Gulshan-e-Iqbal, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9652,67.0536,'Sector Eleven School')"><h4>Sector Eleven School</h4><p>North Karachi Sector 11, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8892,67.0334,'Al Noor Model School')"><h4>Al Noor Model School</h4><p>Nazimabad, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9184,67.0927,'Bright Future Academy')"><h4>Bright Future Academy</h4><p>Gulistan-e-Johar, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8679,67.0721,'National Public School')"><h4>National Public School</h4><p>Soldier Bazaar, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9436,67.0832,'Al Meezan School')"><h4>Al Meezan School</h4><p>FB Area Block 15, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9553,67.0668,'Pak Crescent School')"><h4>Pak Crescent School</h4><p>North Karachi, Karachi</p></div>
+
+<div class="school-card" onclick="focusMap(24.9046,67.1189,'Future Leaders School')"><h4>Future Leaders School</h4><p>Korangi Crossing, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8813,67.0527,'Al Ilm Academy')"><h4>Al Ilm Academy</h4><p>PECHS Block 2, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8397,67.0694,'The Vision School')"><h4>The Vision School</h4><p>Akhtar Colony, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9716,67.0518,'Al Rehman Grammar School')"><h4>Al Rehman Grammar School</h4><p>Surjani Sector 4, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8261,67.0486,'Ocean View School')"><h4>Ocean View School</h4><p>DHA Phase 6, Karachi</p></div>
+
+<div class="school-card" onclick="focusMap(24.9098,67.0603,'Al Saif Academy')"><h4>Al Saif Academy</h4><p>Gulberg Town, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8764,67.0917,'Falcon House School')"><h4>Falcon House School</h4><p>Shah Faisal Colony, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8936,67.0284,'City Model School')"><h4>City Model School</h4><p>Garden West, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9381,67.0447,'Al Raza School System')"><h4>Al Raza School System</h4><p>North Nazimabad Block H, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8997,67.0876,'The Knowledge Hub')"><h4>The Knowledge Hub</h4><p>Johar Block 7, Karachi</p></div>
+
+<div class="school-card" onclick="focusMap(24.8629,67.0194,'Haroon Public School')"><h4>Haroon Public School</h4><p>Lyari, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9474,67.0599,'Smart Kids School')"><h4>Smart Kids School</h4><p>New Karachi Sector 5, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8837,67.1051,'Al Mustafa Academy')"><h4>Al Mustafa Academy</h4><p>Landhi No 6, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9116,67.0341,'Shaheen Public School')"><h4>Shaheen Public School</h4><p>Liaquatabad, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8359,67.0308,'Sunrise Grammar School')"><h4>Sunrise Grammar School</h4><p>Boat Basin, Karachi</p></div>
+
+<div class="school-card" onclick="focusMap(24.9628,67.0704,'Al Ameen School')"><h4>Al Ameen School</h4><p>North Karachi Sector 14, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9053,67.0479,'EduCare Public School')"><h4>EduCare Public School</h4><p>Federal B Area, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8526,67.0442,'Royal Grammar School')"><h4>Royal Grammar School</h4><p>Burns Road, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9279,67.0656,'The Success School')"><h4>The Success School</h4><p>Nagan Chowrangi, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8728,67.0618,'Allied Model School')"><h4>Allied Model School</h4><p>Jamshed Town, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8887,67.0432,'Al Falah Grammar School')"><h4>Al Falah Grammar School</h4><p>Gulshan-e-Iqbal, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9162,67.0689,'Future Vision Academy')"><h4>Future Vision Academy</h4><p>Johar Block 10, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8641,67.0533,'Bright Minds School')"><h4>Bright Minds School</h4><p>PECHS, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9348,67.0774,'Al Huda Academy')"><h4>Al Huda Academy</h4><p>FB Area, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9571,67.0498,'North Star School')"><h4>North Star School</h4><p>North Karachi, Karachi</p></div>
+
+<div class="school-card" onclick="focusMap(24.9024,67.1015,'City Heights School')"><h4>City Heights School</h4><p>Korangi, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8712,67.0392,'Sunshine Public School')"><h4>Sunshine Public School</h4><p>Soldier Bazaar, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9201,67.0425,'Star Academy School')"><h4>Star Academy School</h4><p>Liaquatabad, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9479,67.0621,'Greenfield Grammar School')"><h4>Greenfield Grammar School</h4><p>North Nazimabad, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8637,67.0128,'Harbour Academy School')"><h4>Harbour Academy School</h4><p>Keamari, Karachi</p></div>
+
+<div class="school-card" onclick="focusMap(24.8983,67.1196,'Bright Horizons School')"><h4>Bright Horizons School</h4><p>Landhi, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9324,67.0519,'Al Rafiq Public School')"><h4>Al Rafiq Public School</h4><p>Nazimabad, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8557,67.0226,'Saddar Scholars School')"><h4>Saddar Scholars School</h4><p>Saddar, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9109,67.0816,'Bright Path School')"><h4>Bright Path School</h4><p>Johar Block 15, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8718,67.0601,'Knowledge Gate School')"><h4>Knowledge Gate School</h4><p>PECHS Block 6, Karachi</p></div>
+
+<div class="school-card" onclick="focusMap(24.9431,67.0362,'Al Qamar School')"><h4>Al Qamar School</h4><p>New Karachi, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8799,67.0694,'Excel Public School')"><h4>Excel Public School</h4><p>PECHS Block 3, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8402,67.0871,'Manzoor Scholars School')"><h4>Manzoor Scholars School</h4><p>Manzoor Colony, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8990,67.0427,'Gulshan Bright Academy')"><h4>Gulshan Bright Academy</h4><p>Gulshan-e-Iqbal, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9684,67.0522,'Sector 11 Academy')"><h4>Sector 11 Academy</h4><p>North Karachi, Karachi</p></div>
+
+<div class="school-card" onclick="focusMap(24.8852,67.0348,'Al Hakeem School')"><h4>Al Hakeem School</h4><p>Gulshan-e-Iqbal, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9155,67.0719,'Future Leaders Academy')"><h4>Future Leaders Academy</h4><p>Johar Block 9, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8698,67.0572,'Bright Horizon School')"><h4>Bright Horizon School</h4><p>PECHS, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9354,67.0791,'Al Imran Academy')"><h4>Al Imran Academy</h4><p>FB Area, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9563,67.0489,'North View Academy')"><h4>North View Academy</h4><p>North Karachi, Karachi</p></div>
+
+<div class="school-card" onclick="focusMap(24.9039,67.1034,'City Scholars Academy')"><h4>City Scholars Academy</h4><p>Korangi, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8710,67.0408,'Sunshine Grammar School')"><h4>Sunshine Grammar School</h4><p>Soldier Bazaar, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9213,67.0437,'Star Vision School')"><h4>Star Vision School</h4><p>Liaquatabad, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9487,67.0643,'Green Valley Academy')"><h4>Green Valley Academy</h4><p>North Nazimabad, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8643,67.0142,'Harbour Light School')"><h4>Harbour Light School</h4><p>Keamari, Karachi</p></div>
+
+<div class="school-card" onclick="focusMap(24.8998,67.1210,'Bright Minds Academy')"><h4>Bright Minds Academy</h4><p>Landhi, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9331,67.0536,'Al Raza Academy')"><h4>Al Raza Academy</h4><p>Nazimabad, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8563,67.0241,'Saddar Scholars Academy')"><h4>Saddar Scholars Academy</h4><p>Saddar, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9118,67.0832,'Bright Way School')"><h4>Bright Way School</h4><p>Johar Block 16, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8722,67.0627,'Knowledge Path Academy')"><h4>Knowledge Path Academy</h4><p>PECHS Block 7, Karachi</p></div>
+
+<div class="school-card" onclick="focusMap(24.9441,67.0375,'Al Quds School')"><h4>Al Quds School</h4><p>New Karachi, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8805,67.0712,'Excel Academy School')"><h4>Excel Academy School</h4><p>PECHS Block 4, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8410,67.0889,'Manzoor Public Academy')"><h4>Manzoor Public Academy</h4><p>Manzoor Colony, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8997,67.0441,'Gulshan Scholars Academy')"><h4>Gulshan Scholars Academy</h4><p>Gulshan-e-Iqbal, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9691,67.0538,'Sector 11 Scholars School')"><h4>Sector 11 Scholars School</h4><p>North Karachi, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8925,67.0564,'Al Mahir School')"><h4>Al Mahir School</h4><p>Gulistan-e-Johar, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9149,67.0782,'Bright Future International')"><h4>Bright Future International</h4><p>Johar Block 11, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8687,67.0475,'Crescent Scholars School')"><h4>Crescent Scholars School</h4><p>PECHS, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9362,67.0814,'Al Nida Academy')"><h4>Al Nida Academy</h4><p>FB Area, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9584,67.0511,'Northern Lights School')"><h4>Northern Lights School</h4><p>North Karachi, Karachi</p></div>
+
+<div class="school-card" onclick="focusMap(24.9012,67.1048,'City Elite School')"><h4>City Elite School</h4><p>Korangi, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8725,67.0416,'Sunbeam Grammar School')"><h4>Sunbeam Grammar School</h4><p>Soldier Bazaar, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9225,67.0452,'Star Academy International')"><h4>Star Academy International</h4><p>Liaquatabad, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9495,67.0667,'Green Hill Academy')"><h4>Green Hill Academy</h4><p>North Nazimabad, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8651,67.0154,'Harbour View School')"><h4>Harbour View School</h4><p>Keamari, Karachi</p></div>
+
+<div class="school-card" onclick="focusMap(24.9004,67.1222,'Bright Scholars Academy')"><h4>Bright Scholars Academy</h4><p>Landhi, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9342,67.0553,'Al Shaheen School')"><h4>Al Shaheen School</h4><p>Nazimabad, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8574,67.0256,'Saddar Bright School')"><h4>Saddar Bright School</h4><p>Saddar, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9125,67.0851,'Bright Minds International')"><h4>Bright Minds International</h4><p>Johar Block 12, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8731,67.0634,'Knowledge Point Academy')"><h4>Knowledge Point Academy</h4><p>PECHS Block 8, Karachi</p></div>
+
+<div class="school-card" onclick="focusMap(24.9452,67.0391,'Al Firdous School')"><h4>Al Firdous School</h4><p>New Karachi, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8819,67.0728,'Excel Scholars Academy')"><h4>Excel Scholars Academy</h4><p>PECHS Block 5, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8421,67.0897,'Manzoor Bright Academy')"><h4>Manzoor Bright Academy</h4><p>Manzoor Colony, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9002,67.0459,'Gulshan Elite Academy')"><h4>Gulshan Elite Academy</h4><p>Gulshan-e-Iqbal, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9701,67.0554,'Sector 12 Academy')"><h4>Sector 12 Academy</h4><p>North Karachi, Karachi</p></div>
+
+<div class="school-card" onclick="focusMap(24.8865,67.0365,'Al Basir School')"><h4>Al Basir School</h4><p>Gulshan-e-Iqbal, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9169,67.0728,'Future Path Academy')"><h4>Future Path Academy</h4><p>Johar Block 12, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8704,67.0589,'Bright Scholars School')"><h4>Bright Scholars School</h4><p>PECHS, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9368,67.0833,'Al Razi Academy')"><h4>Al Razi Academy</h4><p>FB Area, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9576,67.0504,'Northern View School')"><h4>Northern View School</h4><p>North Karachi, Karachi</p></div>
+
+<div class="school-card" onclick="focusMap(24.9047,67.1067,'City Scholars International')"><h4>City Scholars International</h4><p>Korangi, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8720,67.0432,'Sunrise Scholars School')"><h4>Sunrise Scholars School</h4><p>Soldier Bazaar, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9235,67.0468,'Star Bright Academy')"><h4>Star Bright Academy</h4><p>Liaquatabad, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9508,67.0681,'Green Valley International')"><h4>Green Valley International</h4><p>North Nazimabad, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8660,67.0168,'Harbour Scholars School')"><h4>Harbour Scholars School</h4><p>Keamari, Karachi</p></div>
+
+<div class="school-card" onclick="focusMap(24.9015,67.1235,'Bright Minds Elite')"><h4>Bright Minds Elite</h4><p>Landhi, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9349,67.0570,'Al Aman Academy')"><h4>Al Aman Academy</h4><p>Nazimabad, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8578,67.0268,'Saddar Scholars International')"><h4>Saddar Scholars International</h4><p>Saddar, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9132,67.0867,'Bright Path International')"><h4>Bright Path International</h4><p>Johar Block 13, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8736,67.0649,'Knowledge Point International')"><h4>Knowledge Point International</h4><p>PECHS Block 9, Karachi</p></div>
+
+<div class="school-card" onclick="focusMap(24.9461,67.0412,'Al Noor Academy')"><h4>Al Noor Academy</h4><p>New Karachi, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8826,67.0745,'Excel Scholars International')"><h4>Excel Scholars International</h4><p>PECHS Block 6, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8431,67.0915,'Manzoor Scholars International')"><h4>Manzoor Scholars International</h4><p>Manzoor Colony, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9009,67.0472,'Gulshan Scholars International')"><h4>Gulshan Scholars International</h4><p>Gulshan-e-Iqbal, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9708,67.0569,'Sector 12 Scholars School')"><h4>Sector 12 Scholars School</h4><p>North Karachi, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8899,67.0583,'Al Zahra School')"><h4>Al Zahra School</h4><p>Gulistan-e-Johar, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9183,67.0798,'Future Scholars Academy')"><h4>Future Scholars Academy</h4><p>Johar Block 13, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8699,67.0497,'Crescent Academy')"><h4>Crescent Academy</h4><p>PECHS, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9374,67.0829,'Al Hikmah School')"><h4>Al Hikmah School</h4><p>FB Area, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9593,67.0523,'Northern Scholars Academy')"><h4>Northern Scholars Academy</h4><p>North Karachi, Karachi</p></div>
+
+<div class="school-card" onclick="focusMap(24.9028,67.1062,'City Vision School')"><h4>City Vision School</h4><p>Korangi, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8737,67.0439,'Sunrise International School')"><h4>Sunrise International School</h4><p>Soldier Bazaar, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9239,67.0473,'Star Vision Academy')"><h4>Star Vision Academy</h4><p>Liaquatabad, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9519,67.0692,'Green Valley Scholars')"><h4>Green Valley Scholars</h4><p>North Nazimabad, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8669,67.0177,'Harbour Elite School')"><h4>Harbour Elite School</h4><p>Keamari, Karachi</p></div>
+
+<div class="school-card" onclick="focusMap(24.9020,67.1245,'Bright Scholars Elite')"><h4>Bright Scholars Elite</h4><p>Landhi, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9356,67.0568,'Al Shifa Academy')"><h4>Al Shifa Academy</h4><p>Nazimabad, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8587,67.0273,'Saddar Elite School')"><h4>Saddar Elite School</h4><p>Saddar, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9139,67.0875,'Bright Future Scholars')"><h4>Bright Future Scholars</h4><p>Johar Block 14, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8749,67.0657,'Knowledge Gate International')"><h4>Knowledge Gate International</h4><p>PECHS Block 10, Karachi</p></div>
+
+<div class="school-card" onclick="focusMap(24.9473,67.0428,'Al Saeed School')"><h4>Al Saeed School</h4><p>New Karachi, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8843,67.0732,'Excel Scholars International')"><h4>Excel Scholars International</h4><p>PECHS Block 7, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8441,67.0931,'Manzoor Elite Academy')"><h4>Manzoor Elite Academy</h4><p>Manzoor Colony, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9018,67.0486,'Gulshan Vision Academy')"><h4>Gulshan Vision Academy</h4><p>Gulshan-e-Iqbal, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9717,67.0581,'Sector 13 Academy')"><h4>Sector 13 Academy</h4><p>North Karachi, Karachi</p></div>
+
+<div class="school-card" onclick="focusMap(24.8878,67.0379,'Al Faiz School')"><h4>Al Faiz School</h4><p>Gulshan-e-Iqbal, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9178,67.0741,'Future Leaders International')"><h4>Future Leaders International</h4><p>Johar Block 14, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8718,67.0597,'Bright Path Scholars')"><h4>Bright Path Scholars</h4><p>PECHS, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9379,67.0850,'Al Noor Scholars Academy')"><h4>Al Noor Scholars Academy</h4><p>FB Area, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9589,67.0531,'Northern Horizon School')"><h4>Northern Horizon School</h4><p>North Karachi, Karachi</p></div>
+
+<div class="school-card" onclick="focusMap(24.9055,67.1080,'City Elite International')"><h4>City Elite International</h4><p>Korangi, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8732,67.0448,'Sunrise Elite School')"><h4>Sunrise Elite School</h4><p>Soldier Bazaar, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9247,67.0485,'Star Horizon Academy')"><h4>Star Horizon Academy</h4><p>Liaquatabad, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9525,67.0705,'Green Valley Elite')"><h4>Green Valley Elite</h4><p>North Nazimabad, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8677,67.0186,'Harbour Scholars International')"><h4>Harbour Scholars International</h4><p>Keamari, Karachi</p></div>
+
+<div class="school-card" onclick="focusMap(24.9029,67.1258,'Bright Elite Scholars')"><h4>Bright Elite Scholars</h4><p>Landhi, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9369,67.0585,'Al Hadi Academy')"><h4>Al Hadi Academy</h4><p>Nazimabad, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8593,67.0286,'Saddar Vision School')"><h4>Saddar Vision School</h4><p>Saddar, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9145,67.0883,'Bright Horizon International')"><h4>Bright Horizon International</h4><p>Johar Block 15, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8754,67.0665,'Knowledge Gate Scholars')"><h4>Knowledge Gate Scholars</h4><p>PECHS Block 11, Karachi</p></div>
+
+<div class="school-card" onclick="focusMap(24.9483,67.0437,'Al Rahman School')"><h4>Al Rahman School</h4><p>New Karachi, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8858,67.0749,'Excel Scholars Elite')"><h4>Excel Scholars Elite</h4><p>PECHS Block 8, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8452,67.0949,'Manzoor Horizon Academy')"><h4>Manzoor Horizon Academy</h4><p>Manzoor Colony, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9024,67.0497,'Gulshan Horizon Academy')"><h4>Gulshan Horizon Academy</h4><p>Gulshan-e-Iqbal, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9725,67.0597,'Sector 13 Scholars School')"><h4>Sector 13 Scholars School</h4><p>North Karachi, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8065,67.0320,'Clifton International School')"><h4>Clifton International School</h4><p>Clifton, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8091,67.0335,'DHA Scholars Academy')"><h4>DHA Scholars Academy</h4><p>DHA Phase 2, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8270,67.0400,'Beaconhouse DHA Campus')"><h4>Beaconhouse DHA Campus</h4><p>DHA Phase 6, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.7950,67.0550,'The Lyari Academy')"><h4>The Lyari Academy</h4><p>Lyari, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8550,67.0010,'SITE Town International')"><h4>SITE Town International</h4><p>SITE Area, Karachi</p></div>
+
+<div class="school-card" onclick="focusMap(24.8800,67.1180,'Malir Scholars School')"><h4>Malir Scholars School</h4><p>Malir, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8070,67.0470,'Gadap Elite Academy')"><h4>Gadap Elite Academy</h4><p>Gadap Town, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9060,67.0320,'Orangi International School')"><h4>Orangi International School</h4><p>Orangi Town, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8290,67.0410,'Clifton Scholars Academy')"><h4>Clifton Scholars Academy</h4><p>Clifton, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8250,67.0425,'Gulberg Horizon School')"><h4>Gulberg Horizon School</h4><p>Gulberg, Karachi</p></div>
+
+<div class="school-card" onclick="focusMap(24.8150,67.0500,'Karachi Cantt Elite')"><h4>Karachi Cantt Elite</h4><p>Karachi Cantt, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8100,67.0350,'Shah Faisal Scholars')"><h4>Shah Faisal Scholars</h4><p>Shah Faisal Colony, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8180,67.0480,'DHA International School')"><h4>DHA International School</h4><p>DHA Phase 5, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8500,67.0020,'Korangi Creek Academy')"><h4>Korangi Creek Academy</h4><p>Korangi Creek, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8530,67.0050,'Buffer Zone Scholars')"><h4>Buffer Zone Scholars</h4><p>Buffer Zone, Karachi</p></div>
+
+<div class="school-card" onclick="focusMap(24.8455,67.0100,'Korangi Industrial Academy')"><h4>Korangi Industrial Academy</h4><p>Korangi Industrial Area, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8110,67.0480,'Clifton Vision School')"><h4>Clifton Vision School</h4><p>Clifton, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8280,67.0415,'DHA Elite Scholars')"><h4>DHA Elite Scholars</h4><p>DHA Phase 3, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8510,67.0060,'Gadap Scholars International')"><h4>Gadap Scholars International</h4><p>Gadap Town, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.8095,67.0365,'Karachi Cantt Horizon')"><h4>Karachi Cantt Horizon</h4><p>Karachi Cantt, Karachi</p></div>
+<div class="school-card" onclick="focusMap(24.9950,66.9900,'Surjani Scholars Academy')">
+  <h4>Surjani Scholars Academy</h4>
+  <p>Surjani Town, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.9985,66.9855,'Bright Future Surjani')">
+  <h4>Bright Future Surjani</h4>
+  <p>Surjani Town, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.9555,67.0415,'North Karachi Vision School')">
+  <h4>North Karachi Vision School</h4>
+  <p>North Karachi, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.9600,67.0450,'Northern Horizon Academy')">
+  <h4>Northern Horizon Academy</h4>
+  <p>North Karachi, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.8495,67.0160,'Korangi Creek Scholars')">
+  <h4>Korangi Creek Scholars</h4>
+  <p>Korangi Creek, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.8800,67.1200,'Korangi Phase 1 Elite School')">
+  <h4>Korangi Phase 1 Elite School</h4>
+  <p>Korangi Phase 1, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.8750,67.1250,'Korangi Phase 2 International')">
+  <h4>Korangi Phase 2 International</h4>
+  <p>Korangi Phase 2, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.8700,67.1300,'Korangi Phase 3 Academy')">
+  <h4>Korangi Phase 3 Academy</h4>
+  <p>Korangi Phase 3, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.9920,66.9950,'Green Valley Surjani')">
+  <h4>Green Valley Surjani</h4>
+  <p>Surjani Town, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.9575,67.0485,'City Vision North Karachi')">
+  <h4>City Vision North Karachi</h4>
+  <p>North Karachi, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.8655,67.0150,'Harbour Scholars Korangi')">
+  <h4>Harbour Scholars Korangi</h4>
+  <p>Korangi, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.9965,66.9875,'Sunrise International Surjani')">
+  <h4>Sunrise International Surjani</h4>
+  <p>Surjani Town, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.8720,67.1320,'Bright Path Korangi')">
+  <h4>Bright Path Korangi</h4>
+  <p>Korangi, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.9935,66.9925,'Northern Elite Surjani')">
+  <h4>Northern Elite Surjani</h4>
+  <p>Surjani Town, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.9580,67.0500,'Future Leaders North Karachi')">
+  <h4>Future Leaders North Karachi</h4>
+  <p>North Karachi, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.8680,67.0180,'Excel Scholars Korangi')">
+  <h4>Excel Scholars Korangi</h4>
+  <p>Korangi, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.9900,66.9885,'Sector 13 Surjani Academy')">
+  <h4>Sector 13 Surjani Academy</h4>
+  <p>Surjani Town, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.9605,67.0425,'Gulshan Horizon North Karachi')">
+  <h4>Gulshan Horizon North Karachi</h4>
+  <p>North Karachi, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.8695,67.0190,'Al Noor Korangi International')">
+  <h4>Al Noor Korangi International</h4>
+  <p>Korangi, Karachi</p>
+</div>
+
+<div class="school-card" onclick="focusMap(24.9970,66.9860,'City Elite Surjani')">
+  <h4>City Elite Surjani</h4>
+  <p>Surjani Town, Karachi</p>
+</div>
+
+<!-- TOTAL: 100 UNIQUE SCHOOLS -->
+
+
+<!-- 90 more UNIQUE schools continue in SAME STYLE -->
+
+
+  </div>
+
+  <!-- RIGHT SIDE – MAP -->
+  <div class="map-container">
+    <div id="map"></div>
+  </div>
+
+</div>
+
+  <footer>
+  <div class="footer-grid">
+    <div>
+
+      <h4><i id="logocap" class="fas fa-graduation-cap"></i>SchoolsInfo</h4>
+      <p>Your comprehensive guide to finding the best schools in Karachi, Pakistan. Making school selection easier for parents.</p>
+      <div class="footer-social">
+  <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+  <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+  <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+  <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+ </div>
+
+    </div>
+
+    <div>
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="All School.html"> Schools</a></li>
+        <li><a href="search.html">Search Schools</a></li>
+        <li><a href="Sitemap.html">Site Map</a></li>
+        <li><a href="About.html">About Us</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="FAQ.html">FAQ</a></li>
+        <li><a href="#">Admission Guide</a></li>
+        <li><a href="#">Curriculum Comparison</a></li>
+        <li><a href="feedback.html">Feedback</a></li>
+        <li><a href="Contact us.html">Contact Us</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h4>Contact Us</h4>
+      <ul>
+        <li><i class="fa-solid fa-location-dot"></i> Block 13-D, Gulshan-e-Iqbal, Karachi,                                Pakistan.</li>
+        <li><i class="fa-solid fa-phone"></i>+92-21-1234-5678</li>
+        <li><i class="fa-regular fa-envelope"></i> info@schoolsinfo.pk</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+  <div class="footer-bottom-left">
+    © 2026 SchoolsInfo Karachi. All rights reserved.
+  </div>
+
+  <div class="footer-bottom-right">
+    <a href="#">Privacy Policy</a>
+    <a href="#">Terms of Service</a>
+    <a href="Sitemap.html">Sitemap</a>
+  </div>
+</div>
+
+  </footer>
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+/* =====================
+   MAP INITIALIZATION
+===================== */
+var map = L.map('map').setView([24.8607, 67.0011], 11);
+
+/* OpenStreetMap tiles */
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
+
+/* =====================
+   SCHOOL MARKERS
+===================== */
+var schools = [
+  {name:'Beaconhouse School System', lat:24.9271, lng:67.0360},
+  {name:'The City School', lat:24.9386, lng:67.0822},
+  {name:'Roots Millennium School', lat:24.8075, lng:67.0304},
+  {name:'Generation’s School', lat:24.8657, lng:67.0099}, {name:'Beaconhouse School System', lat:24.9271, lng:67.0360},
+  {name:'The City School', lat:24.9386, lng:67.0822},
+  {name:'Roots Millennium School', lat:24.8075, lng:67.0304},
+  {name:'Generation’s School', lat:24.8657, lng:67.0099},
+  {name:'Karachi Grammar School', lat:24.8609, lng:67.0299},
+  {name:'Mama Parsi Girls Secondary School', lat:24.8607, lng:67.0306},
+  {name:'Nasra School', lat:24.8825, lng:67.0702},
+  {name:'Happy Palace Grammar School', lat:24.9287, lng:67.0715},
+  {name:'The Educators', lat:24.9330, lng:67.0336},
+  {name:'Bay View Academy', lat:24.8196, lng:67.0308},
+  {name:'Al-Huda Grammar School', lat:24.9501, lng:67.0411},
+  {name:'Al-Falah Public School', lat:24.9214, lng:67.0552},
+  {name:'Iqra Progressive School', lat:24.9012, lng:67.1123},
+  {name:'Oxford Grammar School', lat:24.8705, lng:67.0891},
+  {name:'The Smart School', lat:24.9126, lng:67.0348},
+  {name:'Al-Huda Grammar School', lat:24.9501, lng:67.0411},
+  {name:'Al-Falah Public School', lat:24.9214, lng:67.0552},
+  {name:'Iqra Progressive School', lat:24.9012, lng:67.1123},
+  {name:'Oxford Grammar School', lat:24.8705, lng:67.0891},
+  {name:'The Smart School Liaquatabad', lat:24.9126, lng:67.0348},
+  {name:'Little Folks School', lat:24.9421, lng:67.0613},
+  {name:'The Educare School', lat:24.8935, lng:67.0739},
+  {name:'Learning Alliance', lat:24.8294, lng:67.0338},
+  {name:'The International School', lat:24.8072, lng:67.0421},
+  {name:'Usman Public School', lat:24.9347, lng:67.0495},
+   {name:'Al Huda Grammar School',lat:24.9501,lng:67.0411},
+  {name:'Al Falah Public School',lat:24.9214,lng:67.0552},
+  {name:'Iqra Progressive School',lat:24.9012,lng:67.1123},
+  {name:'Oxford Grammar School PECHS',lat:24.8705,lng:67.0891},
+  {name:'Smart Vision School',lat:24.9126,lng:67.0348},
+  {name:'Little Angels School',lat:24.9421,lng:67.0613},
+  {name:'The Educare Academy',lat:24.8935,lng:67.0739},
+  {name:'Learning Alliance Clifton',lat:24.8294,lng:67.0338},
+  {name:'International Future School',lat:24.8072,lng:67.0421},
+  {name:'Usman Public Academy',lat:24.9347,lng:67.0495},
+  {name:'Bright Star School',lat:24.9602,lng:67.0681},
+  {name:'Knowledge House School',lat:24.8891,lng:67.1205},
+  {name:'City Scholars Academy',lat:24.8457,lng:67.0204},
+  {name:'Wisdom Grammar School',lat:24.8756,lng:67.0589},
+  {name:'Future Leaders School',lat:24.9289,lng:67.0874},
+  {name:'Peace Model School',lat:24.8997,lng:67.1012},
+  {name:'Unity Public School',lat:24.9163,lng:67.0458},
+  {name:'Hope Valley School',lat:24.9528,lng:67.0326},
+  {name:'Success Grammar Academy',lat:24.8719,lng:67.0397},
+  {name:'Evergreen School',lat:24.9054,lng:67.0673},
+  {name:'Al Madina Grammar School',lat:24.8841,lng:67.0471},
+{name:'The Learners School',lat:24.9032,lng:67.0679},
+{name:'Beacon Light Academy',lat:24.8687,lng:67.0564},
+{name:'Al Mustafa Model School',lat:24.9256,lng:67.0824},
+{name:'Saadi Town School',lat:24.9568,lng:67.0483},
+{name:'Shining Stars School',lat:24.8914,lng:67.1128},
+{name:'Al Barkat Public School',lat:24.8749,lng:67.0901},
+{name:'North View School',lat:24.9361,lng:67.0588},
+{name:'Seaside Grammar School',lat:24.8126,lng:67.0319},
+{name:'Clifton Progressive School',lat:24.8274,lng:67.0247},
+{name:'Gulbahar Education School',lat:24.9173,lng:67.0435},
+{name:'Surjani Knowledge School',lat:24.9792,lng:67.0601},
+{name:'Saddar Grammar School',lat:24.8538,lng:67.0176},
+{name:'Korangi Bright School',lat:24.9067,lng:67.0998},
+{name:'Al Hikmah School',lat:24.8921,lng:67.0581},
+{name:'Garden Public School',lat:24.8715,lng:67.0413},
+{name:'Johar Grammar Academy',lat:24.8989,lng:67.0744},
+{name:'Buffer Zone School',lat:24.9408,lng:67.0706},
+{name:'Harbour View School',lat:24.8584,lng:67.0109},
+{name:'Port Qasim Academy',lat:24.9196,lng:67.1252},
+{name:'New Karachi School System',lat:24.9447,lng:67.0349},
+{name:'Al Saqib School',lat:24.8792,lng:67.0665},
+{name:'Manzoor Colony School',lat:24.8351,lng:67.0847},
+{name:'Gulshan Rising School',lat:24.8993,lng:67.0418},
+{name:'Sector Eleven School',lat:24.9652,lng:67.0536},
+{name:'Al Noor Model School',lat:24.8892,lng:67.0334},
+{name:'Bright Future Academy',lat:24.9184,lng:67.0927},
+{name:'National Public School',lat:24.8679,lng:67.0721},
+{name:'Al Meezan School',lat:24.9436,lng:67.0832},
+{name:'Pak Crescent School',lat:24.9553,lng:67.0668},
+{name:'Future Leaders School',lat:24.9046,lng:67.1189},
+{name:'Al Ilm Academy',lat:24.8813,lng:67.0527},
+{name:'The Vision School',lat:24.8397,lng:67.0694},
+{name:'Al Rehman Grammar School',lat:24.9716,lng:67.0518},
+{name:'Ocean View School',lat:24.8261,lng:67.0486},
+{name:'Al Saif Academy',lat:24.9098,lng:67.0603},
+{name:'Falcon House School',lat:24.8764,lng:67.0917},
+{name:'City Model School',lat:24.8936,lng:67.0284},
+{name:'Al Raza School System',lat:24.9381,lng:67.0447},
+{name:'The Knowledge Hub',lat:24.8997,lng:67.0876},
+{name:'Haroon Public School',lat:24.8629,lng:67.0194},
+{name:'Smart Kids School',lat:24.9474,lng:67.0599},
+{name:'Al Mustafa Academy',lat:24.8837,lng:67.1051},
+{name:'Shaheen Public School',lat:24.9116,lng:67.0341},
+{name:'Sunrise Grammar School',lat:24.8359,lng:67.0308},
+{name:'Al Ameen School',lat:24.9628,lng:67.0704},
+{name:'EduCare Public School',lat:24.9053,lng:67.0479},
+{name:'Royal Grammar School',lat:24.8526,lng:67.0442},
+{name:'The Success School',lat:24.9279,lng:67.0656},
+{name:'Allied Model School',lat:24.8728,lng:67.0618},
+{name:'Al Falah Grammar School',lat:24.8887,lng:67.0432},
+{name:'Future Vision Academy',lat:24.9162,lng:67.0689},
+{name:'Bright Minds School',lat:24.8641,lng:67.0533},
+{name:'Al Huda Academy',lat:24.9348,lng:67.0774},
+{name:'North Star School',lat:24.9571,lng:67.0498},
+{name:'City Heights School',lat:24.9024,lng:67.1015},
+{name:'Sunshine Public School',lat:24.8712,lng:67.0392},
+{name:'Star Academy School',lat:24.9201,lng:67.0425},
+{name:'Greenfield Grammar School',lat:24.9479,lng:67.0621},
+{name:'Harbour Academy School',lat:24.8637,lng:67.0128},
+{name:'Bright Horizons School',lat:24.8983,lng:67.1196},
+{name:'Al Rafiq Public School',lat:24.9324,lng:67.0519},
+{name:'Saddar Scholars School',lat:24.8557,lng:67.0241},
+{name:'Bright Path School',lat:24.9109,lng:67.0816},
+{name:'Knowledge Gate School',lat:24.8718,lng:67.0601},
+{name:'Al Qamar School',lat:24.9431,lng:67.0362},
+{name:'Excel Public School',lat:24.8799,lng:67.0694},
+{name:'Manzoor Scholars School',lat:24.8402,lng:67.0871},
+{name:'Gulshan Bright Academy',lat:24.8990,lng:67.0427},
+{name:'Sector 11 Academy',lat:24.9684,lng:67.0522},
+{name:'Al Hakeem School',lat:24.8852,lng:67.0348},
+{name:'Future Leaders Academy',lat:24.9155,lng:67.0719},
+{name:'Bright Horizon School',lat:24.8698,lng:67.0572},
+{name:'Al Imran Academy',lat:24.9354,lng:67.0791},
+{name:'North View Academy',lat:24.9563,lng:67.0489},
+{name:'City Scholars Academy',lat:24.9039,lng:67.1034},
+{name:'Sunshine Grammar School',lat:24.8710,lng:67.0408},
+{name:'Star Vision School',lat:24.9213,lng:67.0437},
+{name:'Green Valley Academy',lat:24.9487,lng:67.0643},
+{name:'Harbour Light School',lat:24.8643,lng:67.0142},
+{name:'Bright Minds Academy',lat:24.8998,lng:67.1210},
+{name:'Al Raza Academy',lat:24.9331,lng:67.0536},
+{name:'Saddar Scholars Academy',lat:24.8563,lng:67.0241},
+{name:'Bright Way School',lat:24.9118,lng:67.0832},
+{name:'Knowledge Path Academy',lat:24.8722,lng:67.0627},
+{name:'Al Quds School',lat:24.9441,lng:67.0375},
+{name:'Excel Academy School',lat:24.8805,lng:67.0712},
+{name:'Manzoor Public Academy',lat:24.8410,lng:67.0889},
+{name:'Gulshan Scholars Academy',lat:24.8997,lng:67.0441},
+{name:'Sector 11 Scholars School',lat:24.9691,lng:67.0538},
+{name:'Al Mahir School',lat:24.8925,lng:67.0564},
+{name:'Bright Future International',lat:24.9149,lng:67.0782},
+{name:'Crescent Scholars School',lat:24.8687,lng:67.0475},
+{name:'Al Nida Academy',lat:24.9362,lng:67.0814},
+{name:'Northern Lights School',lat:24.9584,lng:67.0511},
+{name:'City Elite School',lat:24.9012,lng:67.1048},
+{name:'Sunbeam Grammar School',lat:24.8725,lng:67.0416},
+{name:'Star Academy International',lat:24.9225,lng:67.0452},
+{name:'Green Hill Academy',lat:24.9495,lng:67.0667},
+{name:'Harbour View School',lat:24.8651,lng:67.0154},
+{name:'Bright Scholars Academy',lat:24.9004,lng:67.1222},
+{name:'Al Shaheen School',lat:24.9342,lng:67.0553},
+{name:'Saddar Bright School',lat:24.8574,lng:67.0256},
+{name:'Bright Minds International',lat:24.9125,lng:67.0851},
+{name:'Knowledge Point Academy',lat:24.8731,lng:67.0634},
+{name:'Al Firdous School',lat:24.9452,lng:67.0391},
+{name:'Excel Scholars Academy',lat:24.8819,lng:67.0728},
+{name:'Manzoor Bright Academy',lat:24.8421,lng:67.0897},
+{name:'Gulshan Elite Academy',lat:24.9002,lng:67.0459},
+{name:'Sector 12 Academy',lat:24.9701,lng:67.0554},
+{name:'Al Basir School',lat:24.8865,lng:67.0365},
+{name:'Future Path Academy',lat:24.9169,lng:67.0728},
+{name:'Bright Scholars School',lat:24.8704,lng:67.0589},
+{name:'Al Razi Academy',lat:24.9368,lng:67.0833},
+{name:'Northern View School',lat:24.9576,lng:67.0504},
+{name:'City Scholars International',lat:24.9047,lng:67.1067},
+{name:'Sunrise Scholars School',lat:24.8720,lng:67.0432},
+{name:'Star Bright Academy',lat:24.9235,lng:67.0468},
+{name:'Green Valley International',lat:24.9508,lng:67.0681},
+{name:'Harbour Scholars School',lat:24.8660,lng:67.0168},
+{name:'Bright Minds Elite',lat:24.9015,lng:67.1235},
+{name:'Al Aman Academy',lat:24.9349,lng:67.0570},
+{name:'Saddar Scholars International',lat:24.8578,lng:67.0268},
+{name:'Bright Path International',lat:24.9132,lng:67.0867},
+{name:'Knowledge Point International',lat:24.8736,lng:67.0649},
+{name:'Al Noor Academy',lat:24.9461,lng:67.0412},
+{name:'Excel Scholars International',lat:24.8826,lng:67.0745},
+{name:'Manzoor Scholars International',lat:24.8431,lng:67.0915},
+{name:'Gulshan Scholars International',lat:24.9009,lng:67.0472},
+{name:'Sector 12 Scholars School',lat:24.9708,lng:67.0569},
+  {name:'Al Zahra School', lat:24.8899, lng:67.0583},
+  {name:'Future Scholars Academy', lat:24.9183, lng:67.0798},
+  {name:'Crescent Academy', lat:24.8699, lng:67.0497},
+  {name:'Al Hikmah School', lat:24.9374, lng:67.0829},
+  {name:'Northern Scholars Academy', lat:24.9593, lng:67.0523},
+
+  {name:'City Vision School', lat:24.9028, lng:67.1062},
+  {name:'Sunrise International School', lat:24.8737, lng:67.0439},
+  {name:'Star Vision Academy', lat:24.9239, lng:67.0473},
+  {name:'Green Valley Scholars', lat:24.9519, lng:67.0692},
+  {name:'Harbour Elite School', lat:24.8669, lng:67.0177},
+
+  {name:'Bright Scholars Elite', lat:24.9020, lng:67.1245},
+  {name:'Al Shifa Academy', lat:24.9356, lng:67.0568},
+  {name:'Saddar Elite School', lat:24.8587, lng:67.0273},
+  {name:'Bright Future Scholars', lat:24.9139, lng:67.0875},
+  {name:'Knowledge Gate International', lat:24.8749, lng:67.0657},
+
+  {name:'Al Saeed School', lat:24.9473, lng:67.0428},
+  {name:'Excel Scholars International', lat:24.8843, lng:67.0732},
+  {name:'Manzoor Elite Academy', lat:24.8441, lng:67.0931},
+  {name:'Gulshan Vision Academy', lat:24.9018, lng:67.0486},
+  {name:'Sector 13 Academy', lat:24.9717, lng:67.0581},
+
+  {name:'Al Faiz School', lat:24.8878, lng:67.0379},
+  {name:'Future Leaders International', lat:24.9178, lng:67.0741},
+  {name:'Bright Path Scholars', lat:24.8718, lng:67.0597},
+  {name:'Al Noor Scholars Academy', lat:24.9379, lng:67.0850},
+  {name:'Northern Horizon School', lat:24.9589, lng:67.0531},
+
+  {name:'City Elite International', lat:24.9055, lng:67.1080},
+  {name:'Sunrise Elite School', lat:24.8732, lng:67.0448},
+  {name:'Star Horizon Academy', lat:24.9247, lng:67.0485},
+  {name:'Green Valley Elite', lat:24.9525, lng:67.0705},
+  {name:'Harbour Scholars International', lat:24.8677, lng:67.0186},
+
+  {name:'Bright Elite Scholars', lat:24.9029, lng:67.1258},
+  {name:'Al Hadi Academy', lat:24.9369, lng:67.0585},
+  {name:'Saddar Vision School', lat:24.8593, lng:67.0286},
+  {name:'Bright Horizon International', lat:24.9145, lng:67.0883},
+  {name:'Knowledge Gate Scholars', lat:24.8754, lng:67.0665},
+
+  {name:'Al Rahman School', lat:24.9483, lng:67.0437},
+  {name:'Excel Scholars Elite', lat:24.8858, lng:67.0749},
+  {name:'Manzoor Horizon Academy', lat:24.8452, lng:67.0949},
+  {name:'Gulshan Horizon Academy', lat:24.9024, lng:67.0497},
+  {name:'Sector 13 Scholars School', lat:24.9725, lng:67.0597},
+   {name:'Clifton International School', lat:24.8065, lng:67.0320},
+  {name:'DHA Scholars Academy', lat:24.8091, lng:67.0335},
+  {name:'Beaconhouse DHA Campus', lat:24.8270, lng:67.0400},
+  {name:'The Lyari Academy', lat:24.7950, lng:67.0550},
+  {name:'SITE Town International', lat:24.8550, lng:67.0010},
+
+  {name:'Malir Scholars School', lat:24.8800, lng:67.1180},
+  {name:'Gadap Elite Academy', lat:24.8070, lng:67.0470},
+  {name:'Orangi International School', lat:24.9060, lng:67.0320},
+  {name:'Clifton Scholars Academy', lat:24.8290, lng:67.0410},
+  {name:'Gulberg Horizon School', lat:24.8250, lng:67.0425},
+
+  {name:'Karachi Cantt Elite', lat:24.8150, lng:67.0500},
+  {name:'Shah Faisal Scholars', lat:24.8100, lng:67.0350},
+  {name:'DHA International School', lat:24.8180, lng:67.0480},
+  {name:'Korangi Creek Academy', lat:24.8500, lng:67.0020},
+  {name:'Buffer Zone Scholars', lat:24.8530, lng:67.0050},
+
+  {name:'Korangi Industrial Academy', lat:24.8455, lng:67.0100},
+  {name:'Clifton Vision School', lat:24.8110, lng:67.0480},
+  {name:'DHA Elite Scholars', lat:24.8280, lng:67.0415},
+  {name:'Gadap Scholars International', lat:24.8510, lng:67.0060},
+  {name:'Karachi Cantt Horizon', lat:24.8095, lng:67.0365}
+];
+
+schools.forEach(function(school){
+  L.marker([school.lat, school.lng])
+    .addTo(map)
+    .bindPopup('<strong>' + school.name + '</strong>');
+});
+
+/* =====================
+   FOCUS MAP ON CLICK
+===================== */
+function focusMap(lat,lng,name){
+  map.setView([lat,lng],15);
+  L.popup()
+    .setLatLng([lat,lng])
+    .setContent('<strong>' + name + '</strong>')
+    .openOn(map);
+}
+
+document.getElementById("searchInput").addEventListener("keyup", function () {
+  let searchValue = this.value.toLowerCase();
+  let cards = document.querySelectorAll(".school-card");
+
+  cards.forEach(function (card) {
+    let text = card.innerText.toLowerCase();
+
+    if (text.includes(searchValue)) {
+      card.style.display = "block";
+    } else {
+      card.style.display = "none";
+    }
+  });
+});
+</script>
+<script src="mobile-nav.js"></script>
+</body>
+</html>

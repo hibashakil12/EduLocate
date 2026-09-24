@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SchoolsInfo - Professional Feedback System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+/* Add this to the existing CSS in each file, around line 100-150 */
+
+.hamburger-menu {
+    display: none;
+}
+
+/* Add this to the media query section of each file */
+@media (max-width: 768px) {
+    .hamburger-menu {
+        display: block;
+        width: 30px;
+        height: 20px;
+        position: relative;
+        cursor: pointer;
+        margin-left: 20px;
+    }
+    
+    .hamburger-menu span {
+        display: block;
+        width: 100%;
+        height: 3px;
+        background: var(--primary);
+        position: absolute;
+        transition: 0.3s;
+    }
+    
+    .hamburger-menu span:nth-child(1) { top: 0; }
+    .hamburger-menu span:nth-child(2) { top: 8px; }
+    .hamburger-menu span:nth-child(3) { top: 16px; }
+    
+    .hamburger-menu.active span:nth-child(1) {
+        transform: rotate(45deg);
+        top: 8px;
+    }
+    
+    .hamburger-menu.active span:nth-child(2) {
+        opacity: 0;
+    }
+    
+    .hamburger-menu.active span:nth-child(3) {
+        transform: rotate(-45deg);
+        top: 8px;
+    }
+}
+        body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f4f6f8;
+  color: #333;
+  line-height: 1.6;
+}
+* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gradient: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+            --gradient-hover: linear-gradient(135deg, #3a56d4 0%, #2d0a8a 100%);
+            --shadow: 0 10px 30px rgba(67, 97, 238, 0.15);
+            --nav-height: 80px;
+        }
+
+        
+
+        /* Enhanced Stylish Header & Navigation */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: var(--shadow);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            height: var(--nav-height);
+            border-bottom: 3px solid transparent;
+            background-image: linear-gradient(white, white), var(--gradient);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+            transition: all 0.4s ease;
+        }
+
+        header.scrolled {
+            height: 70px;
+            box-shadow: 0 5px 20px rgba(67, 97, 238, 0.1);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+            height: 100%;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            background: var(--gradient);
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .logo-container:hover .logo-icon {
+            transform: rotate(-5deg) scale(1.05);
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.4);
+        }
+
+        .logo-text h1 {
+            font-size: 1.8rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.2;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text span {
+            color: var(--accent);
+        }
+
+        .logo-text p {
+            font-size: 0.7rem;
+            color: #666;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin-top: -2px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+            margin-left: auto;
+            margin-right: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 3px;
+            background: var(--gradient);
+            left: 0;
+            bottom: -2px;
+            border-radius: 3px;
+            transition: width 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a.active {
+            color: var(--primary);
+        }
+
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        /* Section Styling with Hover Effect */
+        .section {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            transition: all 0.5s ease;
+        }
+
+        .section:hover {
+            background: linear-gradient(135deg, #f0f4f8 0%, #dbe1eb 100%);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 35px;
+            font-weight: 700;
+            color: #3d064b;
+            margin-bottom: 15px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 35px;
+            font-weight: 700;
+            color: #1e3a8a;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .section-title:hover {
+            color: #0a16b9;
+            transform: translateY(-3px);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, #0d0652, #301dd8);
+            border-radius: 2px;
+            transition: all 0.4s ease;
+        }
+
+        .section-title:hover::after {
+            width: 120px;
+            background: linear-gradient(to right,  #a23bf6, #a23bf6);
+        }
+
+
+        /* Section Styling */
+        .section {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, #3b82f6, #1d4ed8);
+            border-radius: 2px;
+        }
+
+        .section-description {
+            text-align: center;
+            font-size: 18px;
+            color: #000000;
+            max-width: 700px;
+            margin: 30px auto 60px;
+        }
+
+        /* Feedback Container */
+        .feedback-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 992px) {
+            .feedback-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Feedback Form */
+        .feedback-form {
+            background-color: white;
+            border-radius: 16px;
+            padding: 35px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            transition: transform 0.3s ease;
+        }
+
+        .feedback-form:hover {
+            transform: translateY(-5px);
+        }
+
+        .feedback-form h3 {
+            font-size: 25px;
+            color: #1e293b;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .rating-input {
+            margin-bottom: 25px;
+        }
+
+        .rating-input label {
+            display: block;
+            font-weight: 500;
+            color: #475569;
+            margin-bottom: 10px;
+        }
+
+        .star-rating {
+            display: flex;
+            direction: row;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        .star {
+            color: #d1d5db;
+            cursor: pointer;
+            transition: color 0.2s ease, transform 0.2s ease;
+            margin-right: 8px;
+        }
+
+        .star:hover {
+            transform: scale(1.2);
+        }
+
+        .star.active {
+            color: #f59e0b;
+        }
+
+        .rating-text {
+            display: block;
+            font-size: 1rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            color: #475569;
+            margin-bottom: 10px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(to right, #3b82f6, #1d4ed8);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(to right, #2563eb, #1e40af);
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
+        }
+
+        .form-note {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Feedback Comments */
+        .feedback-comments {
+            background-color: white;
+            border-radius: 16px;
+            padding: 35px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            max-height: 700px;
+            overflow-y: auto;
+        }
+
+        .feedback-comments h3 {
+            font-size: 25px;
+            color: #1e293b;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f1f5f9;
+            position: sticky;
+            top: 0;
+            background-color: white;
+            z-index: 1;
+        }
+
+        .feedback-list {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .feedback-item {
+            padding: 25px;
+            border-radius: 12px;
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            transition: transform 0.2s ease;
+        }
+
+        .feedback-item:hover {
+            transform: translateX(5px);
+        }
+
+        .feedback-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 15px;
+            border: 3px solid white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .user-info {
+            flex-grow: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+
+        .user-role {
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .feedback-date {
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        .feedback-content {
+            margin-top: 10px;
+        }
+
+        .feedback-text {
+            color: #475569;
+            line-height: 1.7;
+        }
+
+        .feedback-rating {
+            margin-top: 12px;
+            color: #f59e0b;
+            font-size: 1.1rem;
+        }
+
+        .empty-feedback {
+            text-align: center;
+            padding: 40px 20px;
+            color: #94a3b8;
+        }
+
+        .empty-feedback i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #cbd5e1;
+        }
+
+        /* Scrollbar Styling */
+        .feedback-comments::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .feedback-comments::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+
+        .feedback-comments::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        .feedback-comments::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #10b981;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.error {
+            background: #ef4444;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .section {
+                padding: 50px 0;
+            }
+            
+            .section-title {
+                font-size: 2.2rem;
+            }
+            
+            .feedback-form, .feedback-comments {
+                padding: 25px;
+            }
+            
+            .star-rating {
+                font-size: 1.8rem;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+        /* FOOTER */
+footer {
+    background: #111827;
+    color: #d1d5db;
+    padding: 40px 20px 20px;
+    font-size: 13px;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 30px;
+    margin-left: 120px;
+    margin-right: 120px;
+}
+
+footer h4 {
+    color: #fff;
+    margin-bottom: 12px;
+    transition: color 0.3s ease;
+}
+
+footer h4:hover {
+    color: #3b82f6;
+}
+
+footer ul {
+    list-style: none;
+}
+
+footer ul li {
+    font-size: 12px;
+    margin-bottom: 8px;
+    transition: all 0.3s ease;
+}
+
+footer ul li:hover {
+    transform: translateX(3px);
+}
+
+footer ul li a {
+    color: #d1d5db;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+footer ul li:hover a {
+    color: #3b82f6;
+}
+
+/* Footer Bottom */
+.footer-bottom {
+    max-width: 1200px;
+    margin: 25px auto 0;
+    padding-top: 15px;
+    border-top: 1px solid #374151;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    flex-wrap: wrap;
+    margin-left: 118px;
+    margin-right: 119px;
+}
+
+.footer-bottom-left {
+    color: #d1d5db;
+    transition: color 0.3s ease;
+}
+
+.footer-bottom:hover .footer-bottom-left {
+    color: #fff;
+}
+
+.footer-bottom-right a {
+    color: #d1d5db;
+    margin-left: 18px;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    position: relative;
+}
+
+.footer-bottom-right a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: #3b82f6;
+    transition: width 0.3s ease;
+}
+
+.footer-bottom-right a:hover::after {
+    width: 100%;
+}
+
+.footer-bottom-right a:hover {
+    color: #ffffff;
+}
+
+/* Footer Social Icons */
+.footer-social {
+    text-align: center;
+    margin: 20px 0 10px;
+}
+
+.footer-social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    margin: 0 4px;
+    border-radius: 50%;
+    background: #1e293b;
+    color: #e5e7eb;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.footer-social a:hover {
+    background: #2563eb;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+#logocap {
+    font-size: 15px;
+    height: 23px;
+    width: 25px;
+    color: white;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    background-color: #2563eb;
+    margin-right: 8px;
+    transition: all 0.3s ease;
+}
+
+#logocap:hover {
+    background: #1d4ed8;
+    transform: scale(1.05);
+}
+
+/* Responsive Footer */
+@media (max-width: 600px) {
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+
+    .footer-bottom-right a {
+        margin: 0 10px;
+    }
+}
+
+/* Main content padding for fixed header */
+.main-content {
+    padding-top: var(--nav-height);
+}
+
+/* Add smooth scroll behavior */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Add beautiful glow effect on hover for interactive elements */
+.logo-icon:hover,
+#icon1:hover,
+#icon2:hover,
+#icon4:hover,
+#icon5:hover,
+.cta a:hover,
+.footer-social a:hover {
+    filter: brightness(1.1);
+}
+    </style>
+    <link rel="stylesheet" href="responsive.css">
+</head>
+<body>
+        <header id="mainHeader">
+        <nav class="navbar">
+            <a href="index.html" class="logo-container">
+                <div class="logo-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>Edu<span>Locate</span></h1>
+                    <p>FIND YOUR PERFECT SCHOOL</p>
+                </div>
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="index.html" >Home</a></li>
+                <li><a href="All School.html">Schools</a></li>
+                <li><a href="search.html">School Directory</a></li>
+                <li><a href="compare.html">Compare</a></li>
+                <li><a href="Sitemap.html">Site Map</a></li>
+                <li><a href="About.html">About</a></li>
+                <li><a href="FAQ.html">FAQ</a></li>
+                <li><a href="Contact us.html">Contact</a></li>
+                <li><a href="feedback.html" class="active">Feedback</a></li>
+            </ul>
+      
+        </nav>
+    </header><br>
+
+    <!-- Feedback Section -->
+    <section id="feedback" class="section">
+        <div class="container">
+            <h2 class="section-title">User Feedback & Reviews</h2>
+            <div class="section-description">
+                Share your experience with SchoolsInfo and read what other educators, parents, and students have to say about our platform.
+            </div>
+            
+            <div class="feedback-container">
+                <!-- Rating Form -->
+                <div class="feedback-form">
+                    <h3>Share Your Feedback</h3>
+                    <div class="rating-input">
+                        <label>Rate Your Experience:</label>
+                        <div class="star-rating" id="starRating">
+                            <span class="star" data-rating="1"><i class="far fa-star"></i></span>
+                            <span class="star" data-rating="2"><i class="far fa-star"></i></span>
+                            <span class="star" data-rating="3"><i class="far fa-star"></i></span>
+                            <span class="star" data-rating="4"><i class="far fa-star"></i></span>
+                            <span class="star" data-rating="5"><i class="far fa-star"></i></span>
+                        </div>
+                        <span class="rating-text" id="ratingText">Click on a star to rate</span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="feedbackComment">Your Detailed Review:</label>
+                        <textarea id="feedbackComment" class="form-input" rows="5" placeholder="Tell us about your experience with SchoolsInfo. What features did you find most helpful? How can we improve?"></textarea>
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="submitFeedback()">
+                        <i class="fas fa-paper-plane"></i> Submit Your Review
+                    </button>
+                    <p class="form-note"><i class="fas fa-info-circle"></i> This is a demonstration. Feedback data is stored locally in your browser.</p>
+                </div>
+                
+                <!-- Comments Section -->
+                <div class="feedback-comments">
+                    <h3>Community Reviews (4.8/5.0)</h3>
+                    <div class="feedback-list" id="feedbackList">
+                        <!-- Feedback items will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Feedback submitted successfully!</span>
+    </div>
+      <footer>
+  <div class="footer-grid">
+    <div>
+
+      <h4><i id="logocap" class="fas fa-graduation-cap"></i>SchoolsInfo</h4>
+      <p>Your comprehensive guide to finding the best schools in Karachi, Pakistan. Making school selection easier for parents.</p>
+      <div class="footer-social">
+  <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+  <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+  <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+  <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+ </div>
+
+    </div>
+
+    <div>
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="All School.html"> Schools</a></li>
+        <li><a href="search.html">Search Schools</a></li>
+        <li><a href="Sitemap.html">Site Map</a></li>
+        <li><a href="About.html">About Us</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="FAQ.html">FAQ</a></li>
+        <li><a href="#">Admission Guide</a></li>
+        <li><a href="#">Curriculum Comparison</a></li>
+        <li><a href="feedback.html">Feedback</a></li>
+        <li><a href="Contact us.html">Contact Us</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h4>Contact Us</h4>
+      <ul>
+        <li><i class="fa-solid fa-location-dot"></i> Block 13-D, Gulshan-e-Iqbal, Karachi,                                Pakistan.</li>
+        <li><i class="fa-solid fa-phone"></i>+92-21-1234-5678</li>
+        <li><i class="fa-regular fa-envelope"></i> info@schoolsinfo.pk</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+  <div class="footer-bottom-left">
+    © 2026 SchoolsInfo Karachi. All rights reserved.
+  </div>
+
+  <div class="footer-bottom-right">
+    <a href="#">Privacy Policy</a>
+    <a href="#">Terms of Service</a>
+    <a href="Sitemap.html">Sitemap</a>
+  </div>
+</div>
+
+  </footer>
+
+    <script>
+        // Initialize with sample data
+        let feedbackData = [
+            {
+                id: 1,
+                name: "Mr. Zuhad Khan",
+                role: "School Principal",
+                rating: 5,
+                comment: "SchoolsInfo has transformed how we manage student data. The intuitive interface and comprehensive analytics have saved us countless hours of administrative work.",
+                date: "2023-10-15",
+                avatarColor: "#3b82f6"
+            },
+            {
+                id: 2,
+                name: "Mr. Raheel",
+                role: "Parent & PTA President",
+                rating: 4,
+                comment: "As a parent, I appreciate the transparency and ease of access to school information. The communication features have improved parent-teacher collaboration significantly.",
+                date: "2023-09-28",
+                avatarColor: "#10b981"
+            },
+            {
+                id: 3,
+                name: "Mr. Owais",
+                role: "High School Teacher",
+                rating: 5,
+                comment: "The gradebook and attendance tracking features are exceptional. It's made my workflow so much more efficient, allowing me to focus more on teaching.",
+                date: "2023-11-05",
+                avatarColor: "#8b5cf6"
+            },
+            {
+                id: 4,
+                name: "Mr. Moiz Ahmed",
+                role: "District Administrator",
+                rating: 5,
+                comment: "From a district perspective, the reporting capabilities are outstanding. We can now generate comprehensive reports in minutes instead of days.",
+                date: "2023-10-02",
+                avatarColor: "#f59e0b"
+            },
+            {
+                id: 5,
+                name: "Mr. Ali Khan",
+                role: "College Counselor",
+                rating: 4,
+                comment: "The college planning tools have been incredibly helpful for our students. The integration with scholarship databases is a game-changer for our counseling department.",
+                date: "2023-09-15",
+                avatarColor: "#ef4444"
+            }
+        ];
+
+        // DOM elements
+        const starRating = document.getElementById('starRating');
+        const ratingText = document.getElementById('ratingText');
+        const feedbackComment = document.getElementById('feedbackComment');
+        const feedbackList = document.getElementById('feedbackList');
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toastMessage');
+
+        // Rating descriptions
+        const ratingDescriptions = {
+            1: "Poor - Needs significant improvement",
+            2: "Fair - Has room for improvement",
+            3: "Good - Meets expectations",
+            4: "Very Good - Exceeds expectations",
+            5: "Excellent - Outstanding experience"
+        };
+
+        // Initialize star rating system
+        let selectedRating = 0;
+
+        // Create star rating functionality
+        starRating.querySelectorAll('.star').forEach(star => {
+            star.addEventListener('click', function() {
+                selectedRating = parseInt(this.getAttribute('data-rating'));
+                updateStarRating(selectedRating);
+                ratingText.textContent = ratingDescriptions[selectedRating];
+            });
+
+            star.addEventListener('mouseover', function() {
+                const hoverRating = parseInt(this.getAttribute('data-rating'));
+                updateStarRating(hoverRating, false);
+                ratingText.textContent = ratingDescriptions[hoverRating];
+            });
+
+            star.addEventListener('mouseout', function() {
+                updateStarRating(selectedRating, true);
+                ratingText.textContent = selectedRating ? ratingDescriptions[selectedRating] : "Click on a star to rate";
+            });
+        });
+
+        function updateStarRating(rating, permanent = true) {
+            const stars = starRating.querySelectorAll('.star');
+            
+            stars.forEach(star => {
+                const starRating = parseInt(star.getAttribute('data-rating'));
+                const icon = star.querySelector('i');
+                
+                if (starRating <= rating) {
+                    icon.className = 'fas fa-star';
+                    star.classList.add('active');
+                } else {
+                    icon.className = 'far fa-star';
+                    star.classList.remove('active');
+                }
+            });
+            
+            if (permanent) {
+                selectedRating = rating;
+            }
+        }
+
+        // Function to generate user avatar
+        function generateAvatar(name, color) {
+            const initials = name.split(' ').map(n => n[0]).join('').toUpperCase();
+            return `<div class="user-avatar" style="background-color: ${color}; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.2rem;">${initials}</div>`;
+        }
+
+        // Function to format date
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('en-US', options);
+        }
+
+        // Function to render feedback items
+        function renderFeedbackItems() {
+            feedbackList.innerHTML = '';
+            
+            if (feedbackData.length === 0) {
+                feedbackList.innerHTML = `
+                    <div class="empty-feedback">
+                        <i class="far fa-comment-dots"></i>
+                        <h3>No feedback yet</h3>
+                        <p>Be the first to share your experience with SchoolsInfo!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Sort feedback by date (newest first)
+            feedbackData.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            feedbackData.forEach(item => {
+                const stars = '★'.repeat(item.rating) + '☆'.repeat(5 - item.rating);
+                
+                const feedbackItem = document.createElement('div');
+                feedbackItem.className = 'feedback-item';
+                feedbackItem.innerHTML = `
+                    <div class="feedback-header">
+                        ${generateAvatar(item.name, item.avatarColor)}
+                        <div class="user-info">
+                            <div class="user-name">${item.name}</div>
+                            <div class="user-role">${item.role}</div>
+                        </div>
+                        <div class="feedback-date">${formatDate(item.date)}</div>
+                    </div>
+                    <div class="feedback-content">
+                        <div class="feedback-rating">${stars}</div>
+                        <p class="feedback-text">${item.comment}</p>
+                    </div>
+                `;
+                
+                feedbackList.appendChild(feedbackItem);
+            });
+        }
+
+        // Function to show toast notification
+        function showToast(message, isError = false) {
+            toastMessage.textContent = message;
+            
+            if (isError) {
+                toast.classList.add('error');
+            } else {
+                toast.classList.remove('error');
+            }
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Function to submit feedback
+        function submitFeedback() {
+            // Validate rating
+            if (selectedRating === 0) {
+                showToast("Please select a rating before submitting.", true);
+                return;
+            }
+            
+            // Validate comment
+            const comment = feedbackComment.value.trim();
+            if (comment.length < 10) {
+                showToast("Please provide a more detailed comment (at least 10 characters).", true);
+                return;
+            }
+            
+            // Create new feedback object
+            const newFeedback = {
+                id: feedbackData.length + 1,
+                name: "You",
+                role: "Recent Reviewer",
+                rating: selectedRating,
+                comment: comment,
+                date: new Date().toISOString().split('T')[0],
+                avatarColor: "#3b82f6"
+            };
+            
+            // Add to feedback data
+            feedbackData.unshift(newFeedback);
+            
+            // Re-render feedback list
+            renderFeedbackItems();
+            
+            // Reset form
+            updateStarRating(0);
+            ratingText.textContent = "Click on a star to rate";
+            feedbackComment.value = "";
+            selectedRating = 0;
+            
+            // Show success message
+            showToast("Thank you for your feedback! Your review has been added.");
+            
+            // Scroll to show the new feedback
+            const firstFeedbackItem = document.querySelector('.feedback-item');
+            if (firstFeedbackItem) {
+                firstFeedbackItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            renderFeedbackItems();
+            
+            // Add some sample avatars for demo users
+            const avatarContainers = document.querySelectorAll('.user-avatar');
+            avatarContainers.forEach(container => {
+                const initials = container.textContent;
+                container.innerHTML = `<span>${initials}</span>`;
+            });
+        });
+    </script>
+    <script src="mobile-nav.js"></script>
+</body>
+</html>

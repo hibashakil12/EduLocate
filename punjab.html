@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>All Schools – SchoolsInfo Karachi</title>
+<!-- Leaflet Map CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+/* =====================
+   GLOBAL
+===================== */
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f4f6f8;
+  color: #333;
+  line-height: 1.6;
+}
+/* Add this to the existing CSS in each file, around line 100-150 */
+
+.hamburger-menu {
+    display: none;
+}
+
+/* Add this to the media query section of each file */
+@media (max-width: 768px) {
+    .hamburger-menu {
+        display: block;
+        width: 30px;
+        height: 20px;
+        position: relative;
+        cursor: pointer;
+        margin-left: 20px;
+    }
+    
+    .hamburger-menu span {
+        display: block;
+        width: 100%;
+        height: 3px;
+        background: var(--primary);
+        position: absolute;
+        transition: 0.3s;
+    }
+    
+    .hamburger-menu span:nth-child(1) { top: 0; }
+    .hamburger-menu span:nth-child(2) { top: 8px; }
+    .hamburger-menu span:nth-child(3) { top: 16px; }
+    
+    .hamburger-menu.active span:nth-child(1) {
+        transform: rotate(45deg);
+        top: 8px;
+    }
+    
+    .hamburger-menu.active span:nth-child(2) {
+        opacity: 0;
+    }
+    
+    .hamburger-menu.active span:nth-child(3) {
+        transform: rotate(-45deg);
+        top: 8px;
+    }
+}
+* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gradient: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+            --gradient-hover: linear-gradient(135deg, #3a56d4 0%, #2d0a8a 100%);
+            --shadow: 0 10px 30px rgba(67, 97, 238, 0.15);
+            --nav-height: 80px;
+        }
+
+        
+
+        /* Enhanced Stylish Header & Navigation */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: var(--shadow);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            height: var(--nav-height);
+            border-bottom: 3px solid transparent;
+            background-image: linear-gradient(white, white), var(--gradient);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+            transition: all 0.4s ease;
+        }
+
+        header.scrolled {
+            height: 70px;
+            box-shadow: 0 5px 20px rgba(67, 97, 238, 0.1);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+            height: 100%;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            background: var(--gradient);
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .logo-container:hover .logo-icon {
+            transform: rotate(-5deg) scale(1.05);
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.4);
+        }
+
+        .logo-text h1 {
+            font-size: 1.8rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.2;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text span {
+            color: var(--accent);
+        }
+
+        .logo-text p {
+            font-size: 0.7rem;
+            color: #666;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin-top: -2px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+            margin-left: auto;
+            margin-right: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 3px;
+            background: var(--gradient);
+            left: 0;
+            bottom: -2px;
+            border-radius: 3px;
+            transition: width 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a.active {
+            color: var(--primary);
+        }
+
+        .nav-links a.active::after {
+            width: 100%;
+        }
+/* ====================
+   MAIN LAYOUT
+===================== */
+.schools-layout{
+  max-width:1300px;
+  margin:30px auto;
+  padding:0 20px;
+  display:flex;
+  gap:30px;
+}
+
+/* =====================
+   LEFT – SCHOOL LIST
+===================== */
+.school-list{
+  width:40%;
+  background:#fff;
+  border-radius:14px;
+  padding:20px;
+  box-shadow:0 12px 30px rgba(0,0,0,.08);
+  overflow-y:auto;
+  max-height:600px;
+}
+
+.school-list h3{
+  margin-bottom:15px;
+  color:#1d4ed8;
+}
+
+.school-card{
+  border:1px solid #e5e7eb;
+  border-radius:10px;
+  padding:15px;
+  margin-bottom:12px;
+  cursor:pointer;
+  transition:.3s;
+}
+
+.school-card:hover{
+  background:#eff6ff;
+  border-color:#2563eb;
+}
+
+.school-card h4{
+  margin:0 0 6px;
+  font-size:16px;
+}
+
+.school-card p{
+  margin:0;
+  font-size:13px;
+  color:#6b7280;
+}
+
+/* =====================
+   RIGHT – MAP
+===================== */
+.map-container{
+  width:60%;
+  background:#fff;
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:0 12px 30px rgba(0,0,0,.08);
+}
+
+#map{
+  width:100%;
+  height:600px;
+}
+
+/* =====================
+   RESPONSIVE
+===================== */
+@media(max-width:900px){
+  .schools-layout{
+    flex-direction:column;
+  }
+
+  .school-list,
+  .map-container{
+    width:100%;
+    max-height:none;
+  }
+
+  #map{
+    height:400px;
+  }
+}
+/* ===============================
+   PROVINCE TABS – PROFESSIONAL UI
+================================ */
+
+.faq-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin: 25px auto 35px;
+}
+
+/* BUTTON BASE */
+.faq-tabs button {
+  border: none;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+}
+
+/* LINK INSIDE BUTTON */
+.faq-tabs button a {
+  display: block;
+  padding: 10px 22px;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  color: #374151;
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  transition: all 0.3s ease;
+}
+
+/* HOVER EFFECT */
+.faq-tabs button a:hover {
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 6px 14px rgba(37, 99, 235, 0.35);
+  transform: translateY(-2px);
+}
+
+/* ACTIVE PAGE BUTTON */
+.faq-tabs button.active a,
+.faq-tabs button a.active {
+  background: linear-gradient(135deg, #1d4ed8, #1e3a8a);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 6px 16px rgba(29, 78, 216, 0.45);
+}
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 600px) {
+  .faq-tabs {
+    gap: 8px;
+  }
+
+  .faq-tabs button a {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+}
+
+.faq-search input {
+  width: 80%;
+  margin-left: 140px;
+  margin-right: 140px;
+  padding: 14px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  margin-bottom: 25px;
+}
+/* FOOTER */
+footer {
+    background: #111827;
+    color: #d1d5db;
+    padding: 40px 20px 20px;
+    font-size: 13px;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 30px;
+    margin-left: 120px;
+    margin-right: 120px;
+}
+
+footer h4 {
+    color: #fff;
+    margin-bottom: 12px;
+    transition: color 0.3s ease;
+}
+
+footer h4:hover {
+    color: #3b82f6;
+}
+
+footer ul {
+    list-style: none;
+}
+
+footer ul li {
+    font-size: 12px;
+    margin-bottom: 8px;
+    transition: all 0.3s ease;
+}
+
+footer ul li:hover {
+    transform: translateX(3px);
+}
+
+footer ul li a {
+    color: #d1d5db;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+footer ul li:hover a {
+    color: #3b82f6;
+}
+
+/* Footer Bottom */
+.footer-bottom {
+    max-width: 1200px;
+    margin: 25px auto 0;
+    padding-top: 15px;
+    border-top: 1px solid #374151;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    flex-wrap: wrap;
+    margin-left: 118px;
+    margin-right: 119px;
+}
+
+.footer-bottom-left {
+    color: #d1d5db;
+    transition: color 0.3s ease;
+}
+
+.footer-bottom:hover .footer-bottom-left {
+    color: #fff;
+}
+
+.footer-bottom-right a {
+    color: #d1d5db;
+    margin-left: 18px;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    position: relative;
+}
+
+.footer-bottom-right a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: #3b82f6;
+    transition: width 0.3s ease;
+}
+
+.footer-bottom-right a:hover::after {
+    width: 100%;
+}
+
+.footer-bottom-right a:hover {
+    color: #ffffff;
+}
+
+/* Footer Social Icons */
+.footer-social {
+    text-align: center;
+    margin: 20px 0 10px;
+}
+
+.footer-social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    margin: 0 4px;
+    border-radius: 50%;
+    background: #1e293b;
+    color: #e5e7eb;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.footer-social a:hover {
+    background: #2563eb;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+#logocap {
+    font-size: 15px;
+    height: 23px;
+    width: 25px;
+    color: white;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    background-color: #2563eb;
+    margin-right: 8px;
+    transition: all 0.3s ease;
+}
+
+#logocap:hover {
+    background: #1d4ed8;
+    transform: scale(1.05);
+}
+
+/* Responsive Footer */
+@media (max-width: 600px) {
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+
+    .footer-bottom-right a {
+        margin: 0 10px;
+    }
+}
+
+/* Main content padding for fixed header */
+.main-content {
+    padding-top: var(--nav-height);
+}
+
+/* Add smooth scroll behavior */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Add beautiful glow effect on hover for interactive elements */
+.logo-icon:hover,
+#icon1:hover,
+#icon2:hover,
+#icon4:hover,
+#icon5:hover,
+.cta a:hover,
+.footer-social a:hover {
+    filter: brightness(1.1);
+}
+</style>
+<link rel="stylesheet" href="responsive.css">
+</head>
+
+<body>
+
+<!-- HEADER -->
+   <header id="mainHeader">
+        <nav class="navbar">
+            <a href="index.html" class="logo-container">
+                <div class="logo-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>Edu<span>Locate</span></h1>
+                    <p>FIND YOUR PERFECT SCHOOL</p>
+                </div>
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="index.html" >Home</a></li>
+                <li><a href="All School.html" >Schools</a></li>
+                <li><a href="search.html">School Directory</a></li>
+                <li><a href="compare.html">Compare</a></li>
+                <li><a href="Sitemap.html" class="active">Site Map</a></li>
+                <li><a href="About.html">About</a></li>
+                <li><a href="FAQ.html">FAQ</a></li>
+                <li><a href="Contact us.html">Contact</a></li>
+                <li><a href="feedback.html">Feedback</a></li>
+            </ul>
+      
+        </nav>
+    </header><br><br><br><br><br>
+
+     <div class="faq-search">
+    <input type="text" id="searchInput" placeholder="Search Schools...">
+  </div><br>
+
+<div class="faq-tabs">
+    <button class="active"><a href="sindh.html">Sindh</a></button>
+    <button class="active"><a href="balochistan.html">Balochistan</a></button>
+    <button class="active"><a href="punjab.html">Punjab</a></button>
+    <button class="active"><a href="khyber.html">KPK</a></button>
+    <button class="active"><a href="islamabad.html">Islamabad</a></button>
+  </div>
+
+<!-- MAIN CONTENT -->
+<div class="schools-layout">
+
+  <!-- LEFT SIDE – SCHOOL LIST -->
+  <div class="school-list">
+    <h3><i class="fa-solid fa-school"></i> Schools in Punjab</h3>
+<!-- Lahore Schools -->
+<div class="school-card" onclick="focusMap(31.5204,74.3587,'Beaconhouse School System Lahore')"><h4>Beaconhouse School System Lahore</h4><p>Lahore, Punjab</p></div>
+<div class="school-card" onclick="focusMap(31.5150,74.3440,'The City School Lahore')"><h4>The City School Lahore</h4><p>Lahore, Punjab</p></div>
+<div class="school-card" onclick="focusMap(31.5300,74.3600,'Roots International Lahore')"><h4>Roots International Lahore</h4><p>Lahore, Punjab</p></div>
+<div class="school-card" onclick="focusMap(31.5000,74.3500,'Lahore Grammar School')"><h4>Lahore Grammar School</h4><p>Lahore, Punjab</p></div>
+<div class="school-card" onclick="focusMap(31.5220,74.3620,'Bloomfield Hall Lahore')"><h4>Bloomfield Hall Lahore</h4><p>Lahore, Punjab</p></div>
+
+<!-- Faisalabad Schools -->
+<div class="school-card" onclick="focusMap(31.4180,73.0790,'Faisalabad Grammar School')"><h4>Faisalabad Grammar School</h4><p>Faisalabad, Punjab</p></div>
+<div class="school-card" onclick="focusMap(31.4200,73.0800,'Roots International Faisalabad')"><h4>Roots International Faisalabad</h4><p>Faisalabad, Punjab</p></div>
+<div class="school-card" onclick="focusMap(31.4250,73.0850,'The City School Faisalabad')"><h4>The City School Faisalabad</h4><p>Faisalabad, Punjab</p></div>
+<div class="school-card" onclick="focusMap(31.4190,73.0820,'Beaconhouse School Faisalabad')"><h4>Beaconhouse School Faisalabad</h4><p>Faisalabad, Punjab</p></div>
+<div class="school-card" onclick="focusMap(31.4210,73.0860,'Dar-e-Arqam School Faisalabad')"><h4>Dar-e-Arqam School Faisalabad</h4><p>Faisalabad, Punjab</p></div>
+
+<!-- Multan Schools -->
+<div class="school-card" onclick="focusMap(30.1575,71.5249,'Multan Grammar School')"><h4>Multan Grammar School</h4><p>Multan, Punjab</p></div>
+<div class="school-card" onclick="focusMap(30.1600,71.5260,'The City School Multan')"><h4>The City School Multan</h4><p>Multan, Punjab</p></div>
+<div class="school-card" onclick="focusMap(30.1580,71.5255,'Roots International Multan')"><h4>Roots International Multan</h4><p>Multan, Punjab</p></div>
+<div class="school-card" onclick="focusMap(30.1550,71.5230,'Beaconhouse School Multan')"><h4>Beaconhouse School Multan</h4><p>Multan, Punjab</p></div>
+<div class="school-card" onclick="focusMap(30.1590,71.5245,'Dar-e-Arqam School Multan')"><h4>Dar-e-Arqam School Multan</h4><p>Multan, Punjab</p></div>
+
+<!-- Rawalpindi Schools -->
+<div class="school-card" onclick="focusMap(33.6844,73.0479,'Roots International Rawalpindi')"><h4>Roots International Rawalpindi</h4><p>Rawalpindi, Punjab</p></div>
+<div class="school-card" onclick="focusMap(33.6800,73.0450,'Beaconhouse School Rawalpindi')"><h4>Beaconhouse School Rawalpindi</h4><p>Rawalpindi, Punjab</p></div>
+<div class="school-card" onclick="focusMap(33.6860,73.0500,'The City School Rawalpindi')"><h4>The City School Rawalpindi</h4><p>Rawalpindi, Punjab</p></div>
+<div class="school-card" onclick="focusMap(33.6820,73.0480,'Dar-e-Arqam School Rawalpindi')"><h4>Dar-e-Arqam School Rawalpindi</h4><p>Rawalpindi, Punjab</p></div>
+<div class="school-card" onclick="focusMap(33.6850,73.0490,'Lahore Grammar School Rawalpindi')"><h4>Lahore Grammar School Rawalpindi</h4><p>Rawalpindi, Punjab</p></div>
+
+<!-- Gujranwala Schools -->
+<div class="school-card" onclick="focusMap(32.1877,74.1945,'Beaconhouse School Gujranwala')"><h4>Beaconhouse School Gujranwala</h4><p>Gujranwala, Punjab</p></div>
+<div class="school-card" onclick="focusMap(32.1880,74.1960,'Roots International Gujranwala')"><h4>Roots International Gujranwala</h4><p>Gujranwala, Punjab</p></div>
+<div class="school-card" onclick="focusMap(32.1855,74.1920,'The City School Gujranwala')"><h4>The City School Gujranwala</h4><p>Gujranwala, Punjab</p></div>
+<div class="school-card" onclick="focusMap(32.1865,74.1935,'Dar-e-Arqam School Gujranwala')"><h4>Dar-e-Arqam School Gujranwala</h4><p>Gujranwala, Punjab</p></div>
+<div class="school-card" onclick="focusMap(32.1870,74.1950,'Lahore Grammar School Gujranwala')"><h4>Lahore Grammar School Gujranwala</h4><p>Gujranwala, Punjab</p></div>
+
+<!-- Sialkot Schools -->
+<div class="school-card" onclick="focusMap(32.4927,74.5319,'Beaconhouse School Sialkot')"><h4>Beaconhouse School Sialkot</h4><p>Sialkot, Punjab</p></div>
+<div class="school-card" onclick="focusMap(32.4900,74.5300,'Roots International Sialkot')"><h4>Roots International Sialkot</h4><p>Sialkot, Punjab</p></div>
+<div class="school-card" onclick="focusMap(32.4915,74.5325,'The City School Sialkot')"><h4>The City School Sialkot</h4><p>Sialkot, Punjab</p></div>
+<div class="school-card" onclick="focusMap(32.4930,74.5335,'Dar-e-Arqam School Sialkot')"><h4>Dar-e-Arqam School Sialkot</h4><p>Sialkot, Punjab</p></div>
+<div class="school-card" onclick="focusMap(32.4920,74.5340,'Lahore Grammar School Sialkot')"><h4>Lahore Grammar School Sialkot</h4><p>Sialkot, Punjab</p></div>
+
+<!-- Bahawalpur Schools -->
+<div class="school-card" onclick="focusMap(29.3956,71.6836,'Beaconhouse School Bahawalpur')"><h4>Beaconhouse School Bahawalpur</h4><p>Bahawalpur, Punjab</p></div>
+<div class="school-card" onclick="focusMap(29.3980,71.6850,'Roots International Bahawalpur')"><h4>Roots International Bahawalpur</h4><p>Bahawalpur, Punjab</p></div>
+<div class="school-card" onclick="focusMap(29.3970,71.6840,'The City School Bahawalpur')"><h4>The City School Bahawalpur</h4><p>Bahawalpur, Punjab</p></div>
+<div class="school-card" onclick="focusMap(29.3960,71.6820,'Dar-e-Arqam School Bahawalpur')"><h4>Dar-e-Arqam School Bahawalpur</h4><p>Bahawalpur, Punjab</p></div>
+<div class="school-card" onclick="focusMap(29.3950,71.6810,'Lahore Grammar School Bahawalpur')"><h4>Lahore Grammar School Bahawalpur</h4><p>Bahawalpur, Punjab</p></div>
+<!-- Sargodha Schools -->
+<div class="school-card" onclick="focusMap(32.0836,72.6711,'Sargodha Grammar School')"><h4>Sargodha Grammar School</h4><p>Sargodha, Punjab</p></div>
+<div class="school-card" onclick="focusMap(32.0850,72.6720,'Roots International Sargodha')"><h4>Roots International Sargodha</h4><p>Sargodha, Punjab</p></div>
+<div class="school-card" onclick="focusMap(32.0820,72.6700,'Beaconhouse School Sargodha')"><h4>Beaconhouse School Sargodha</h4><p>Sargodha, Punjab</p></div>
+<div class="school-card" onclick="focusMap(32.0840,72.6730,'The City School Sargodha')"><h4>The City School Sargodha</h4><p>Sargodha, Punjab</p></div>
+<div class="school-card" onclick="focusMap(32.0835,72.6715,'Dar-e-Arqam School Sargodha')"><h4>Dar-e-Arqam School Sargodha</h4><p>Sargodha, Punjab</p></div>
+
+<!-- Jhang Schools -->
+<div class="school-card" onclick="focusMap(31.2694,72.3274,'Jhang Grammar School')"><h4>Jhang Grammar School</h4><p>Jhang, Punjab</p></div>
+<div class="school-card" onclick="focusMap(31.2700,72.3280,'Roots International Jhang')"><h4>Roots International Jhang</h4><p>Jhang, Punjab</p></div>
+<div class="school-card" onclick="focusMap(31.2680,72.3260,'Beaconhouse School Jhang')"><h4>Beaconhouse School Jhang</h4><p>Jhang, Punjab</p></div>
+<div class="school-card" onclick="focusMap(31.2710,72.3290,'The City School Jhang')"><h4>The City School Jhang</h4><p>Jhang, Punjab</p></div>
+<div class="school-card" onclick="focusMap(31.2695,72.3275,'Dar-e-Arqam School Jhang')"><h4>Dar-e-Arqam School Jhang</h4><p>Jhang, Punjab</p></div>
+
+<!-- Mianwali Schools -->
+<div class="school-card" onclick="focusMap(32.5839,71.5260,'Mianwali Grammar School')"><h4>Mianwali Grammar School</h4><p>Mianwali, Punjab</p></div>
+<div class="school-card" onclick="focusMap(32.5845,71.5270,'Roots International Mianwali')"><h4>Roots International Mianwali</h4><p>Mianwali, Punjab</p></div>
+<div class="school-card" onclick="focusMap(32.5830,71.5250,'Beaconhouse School Mianwali')"><h4>Beaconhouse School Mianwali</h4><p>Mianwali, Punjab</p></div>
+<div class="school-card" onclick="focusMap(32.5850,71.5280,'The City School Mianwali')"><h4>The City School Mianwali</h4><p>Mianwali, Punjab</p></div>
+<div class="school-card" onclick="focusMap(32.5835,71.5265,'Dar-e-Arqam School Mianwali')"><h4>Dar-e-Arqam School Mianwali</h4><p>Mianwali, Punjab</p></div>
+
+<!-- Gujrat Schools -->
+<div class="school-card" onclick="focusMap(32.5736,74.0754,'Gujrat Grammar School')"><h4>Gujrat Grammar School</h4><p>Gujrat, Punjab</p></div>
+<div class="school-card" onclick="focusMap(32.5740,74.0760,'Roots International Gujrat')"><h4>Roots International Gujrat</h4><p>Gujrat, Punjab</p></div>
+<div class="school-card" onclick="focusMap(32.5730,74.0740,'Beaconhouse School Gujrat')"><h4>Beaconhouse School Gujrat</h4><p>Gujrat, Punjab</p></div>
+<div class="school-card" onclick="focusMap(32.5745,74.0770,'The City School Gujrat')"><h4>The City School Gujrat</h4><p>Gujrat, Punjab</p></div>
+<div class="school-card" onclick="focusMap(32.5735,74.0755,'Dar-e-Arqam School Gujrat')"><h4>Dar-e-Arqam School Gujrat</h4><p>Gujrat, Punjab</p></div>
+
+<!-- Chakwal Schools -->
+<div class="school-card" onclick="focusMap(32.9336,72.8584,'Chakwal Grammar School')"><h4>Chakwal Grammar School</h4><p>Chakwal, Punjab</p></div>
+<div class="school-card" onclick="focusMap(32.9340,72.8590,'Roots International Chakwal')"><h4>Roots International Chakwal</h4><p>Chakwal, Punjab</p></div>
+<div class="school-card" onclick="focusMap(32.9330,72.8570,'Beaconhouse School Chakwal')"><h4>Beaconhouse School Chakwal</h4><p>Chakwal, Punjab</p></div>
+<div class="school-card" onclick="focusMap(32.9345,72.8600,'The City School Chakwal')"><h4>The City School Chakwal</h4><p>Chakwal, Punjab</p></div>
+<div class="school-card" onclick="focusMap(32.9335,72.8585,'Dar-e-Arqam School Chakwal')"><h4>Dar-e-Arqam School Chakwal</h4><p>Chakwal, Punjab</p></div>
+
+<!-- Okara Schools -->
+<div class="school-card" onclick="focusMap(30.8080,73.4500,'Okara Grammar School')"><h4>Okara Grammar School</h4><p>Okara, Punjab</p></div>
+<div class="school-card" onclick="focusMap(30.8085,73.4510,'Roots International Okara')"><h4>Roots International Okara</h4><p>Okara, Punjab</p></div>
+<div class="school-card" onclick="focusMap(30.8075,73.4490,'Beaconhouse School Okara')"><h4>Beaconhouse School Okara</h4><p>Okara, Punjab</p></div>
+<div class="school-card" onclick="focusMap(30.8090,73.4520,'The City School Okara')"><h4>The City School Okara</h4><p>Okara, Punjab</p></div>
+<div class="school-card" onclick="focusMap(30.8082,73.4505,'Dar-e-Arqam School Okara')"><h4>Dar-e-Arqam School Okara</h4><p>Okara, Punjab</p></div>
+
+<!-- Sheikhupura Schools -->
+<div class="school-card" onclick="focusMap(31.7131,73.9783,'Sheikhupura Grammar School')"><h4>Sheikhupura Grammar School</h4><p>Sheikhupura, Punjab</p></div>
+<div class="school-card" onclick="focusMap(31.7140,73.9790,'Roots International Sheikhupura')"><h4>Roots International Sheikhupura</h4><p>Sheikhupura, Punjab</p></div>
+<div class="school-card" onclick="focusMap(31.7130,73.9770,'Beaconhouse School Sheikhupura')"><h4>Beaconhouse School Sheikhupura</h4><p>Sheikhupura, Punjab</p></div>
+<div class="school-card" onclick="focusMap(31.7150,73.9800,'The City School Sheikhupura')"><h4>The City School Sheikhupura</h4><p>Sheikhupura, Punjab</p></div>
+<div class="school-card" onclick="focusMap(31.7135,73.9785,'Dar-e-Arqam School Sheikhupura')"><h4>Dar-e-Arqam School Sheikhupura</h4><p>Sheikhupura, Punjab</p></div>
+
+  </div>
+
+  <!-- RIGHT SIDE – MAP -->
+  <div class="map-container">
+    <div id="map"></div>
+  </div>
+
+</div>
+
+  <footer>
+  <div class="footer-grid">
+    <div>
+
+      <h4><i id="logocap" class="fas fa-graduation-cap"></i>SchoolsInfo</h4>
+      <p>Your comprehensive guide to finding the best schools in Karachi, Pakistan. Making school selection easier for parents.</p>
+      <div class="footer-social">
+  <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+  <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+  <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+  <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+ </div>
+
+    </div>
+
+    <div>
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="All School.html"> Schools</a></li>
+        <li><a href="search.html">Search Schools</a></li>
+        <li><a href="Sitemap.html">Site Map</a></li>
+        <li><a href="About.html">About Us</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="FAQ.html">FAQ</a></li>
+        <li><a href="#">Admission Guide</a></li>
+        <li><a href="#">Curriculum Comparison</a></li>
+        <li><a href="feedback.html">Feedback</a></li>
+        <li><a href="Contact us.html">Contact Us</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h4>Contact Us</h4>
+      <ul>
+        <li><i class="fa-solid fa-location-dot"></i> Block 13-D, Gulshan-e-Iqbal, Karachi,                                Pakistan.</li>
+        <li><i class="fa-solid fa-phone"></i>+92-21-1234-5678</li>
+        <li><i class="fa-regular fa-envelope"></i> info@schoolsinfo.pk</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+  <div class="footer-bottom-left">
+    © 2026 SchoolsInfo Karachi. All rights reserved.
+  </div>
+
+  <div class="footer-bottom-right">
+    <a href="#">Privacy Policy</a>
+    <a href="#">Terms of Service</a>
+    <a href="Sitemap.html">Sitemap</a>
+  </div>
+</div>
+
+  </footer>
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+/* =====================
+   MAP INITIALIZATION
+===================== */
+var map = L.map('map').setView([24.8607, 67.0011], 11);
+
+/* OpenStreetMap tiles */
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
+
+/* =====================
+   SCHOOL MARKERS
+===================== */
+var schools = [
+{name:'Beaconhouse School System Lahore', lat:31.5204, lng:74.3587},
+{name:'The City School Lahore', lat:31.5150, lng:74.3440},
+{name:'Roots International Lahore', lat:31.5300, lng:74.3600},
+{name:'Lahore Grammar School', lat:31.5000, lng:74.3500},
+{name:'Bloomfield Hall Lahore', lat:31.5220, lng:74.3620},
+
+{name:'Faisalabad Grammar School', lat:31.4180, lng:73.0790},
+{name:'Roots International Faisalabad', lat:31.4200, lng:73.0800},
+{name:'The City School Faisalabad', lat:31.4250, lng:73.0850},
+{name:'Beaconhouse School Faisalabad', lat:31.4190, lng:73.0820},
+{name:'Dar-e-Arqam School Faisalabad', lat:31.4210, lng:73.0860},
+
+{name:'Multan Grammar School', lat:30.1575, lng:71.5249},
+{name:'The City School Multan', lat:30.1600, lng:71.5260},
+{name:'Roots International Multan', lat:30.1580, lng:71.5255},
+{name:'Beaconhouse School Multan', lat:30.1550, lng:71.5230},
+{name:'Dar-e-Arqam School Multan', lat:30.1590, lng:71.5245},
+
+{name:'Roots International Rawalpindi', lat:33.6844, lng:73.0479},
+{name:'Beaconhouse School Rawalpindi', lat:33.6800, lng:73.0450},
+{name:'The City School Rawalpindi', lat:33.6860, lng:73.0500},
+{name:'Dar-e-Arqam School Rawalpindi', lat:33.6820, lng:73.0480},
+{name:'Lahore Grammar School Rawalpindi', lat:33.6850, lng:73.0490},
+
+{name:'Beaconhouse School Gujranwala', lat:32.1877, lng:74.1945},
+{name:'Roots International Gujranwala', lat:32.1880, lng:74.1960},
+{name:'The City School Gujranwala', lat:32.1855, lng:74.1920},
+{name:'Dar-e-Arqam School Gujranwala', lat:32.1865, lng:74.1935},
+{name:'Lahore Grammar School Gujranwala', lat:32.1870, lng:74.1950},
+
+{name:'Beaconhouse School Sialkot', lat:32.4927, lng:74.5319},
+{name:'Roots International Sialkot', lat:32.4900, lng:74.5300},
+{name:'The City School Sialkot', lat:32.4915, lng:74.5325},
+{name:'Dar-e-Arqam School Sialkot', lat:32.4930, lng:74.5335},
+{name:'Lahore Grammar School Sialkot', lat:32.4920, lng:74.5340},
+
+{name:'Beaconhouse School Bahawalpur', lat:29.3956, lng:71.6836},
+{name:'Roots International Bahawalpur', lat:29.3980, lng:71.6850},
+{name:'The City School Bahawalpur', lat:29.3970, lng:71.6840},
+{name:'Dar-e-Arqam School Bahawalpur', lat:29.3960, lng:71.6820},
+{name:'Lahore Grammar School Bahawalpur', lat:29.3950, lng:71.6810},
+  // Sargodha Schools
+  {name:'Sargodha Grammar School', lat:32.0836, lng:72.6711},
+  {name:'Roots International Sargodha', lat:32.0850, lng:72.6720},
+  {name:'Beaconhouse School Sargodha', lat:32.0820, lng:72.6700},
+  {name:'The City School Sargodha', lat:32.0840, lng:72.6730},
+  {name:'Dar-e-Arqam School Sargodha', lat:32.0835, lng:72.6715},
+
+  // Jhang Schools
+  {name:'Jhang Grammar School', lat:31.2694, lng:72.3274},
+  {name:'Roots International Jhang', lat:31.2700, lng:72.3280},
+  {name:'Beaconhouse School Jhang', lat:31.2680, lng:72.3260},
+  {name:'The City School Jhang', lat:31.2710, lng:72.3290},
+  {name:'Dar-e-Arqam School Jhang', lat:31.2695, lng:72.3275},
+
+  // Mianwali Schools
+  {name:'Mianwali Grammar School', lat:32.5839, lng:71.5260},
+  {name:'Roots International Mianwali', lat:32.5845, lng:71.5270},
+  {name:'Beaconhouse School Mianwali', lat:32.5830, lng:71.5250},
+  {name:'The City School Mianwali', lat:32.5850, lng:71.5280},
+  {name:'Dar-e-Arqam School Mianwali', lat:32.5835, lng:71.5265},
+
+  // Gujrat Schools
+  {name:'Gujrat Grammar School', lat:32.5736, lng:74.0754},
+  {name:'Roots International Gujrat', lat:32.5740, lng:74.0760},
+  {name:'Beaconhouse School Gujrat', lat:32.5730, lng:74.0740},
+  {name:'The City School Gujrat', lat:32.5745, lng:74.0770},
+  {name:'Dar-e-Arqam School Gujrat', lat:32.5735, lng:74.0755},
+
+  // Chakwal Schools
+  {name:'Chakwal Grammar School', lat:32.9336, lng:72.8584},
+  {name:'Roots International Chakwal', lat:32.9340, lng:72.8590},
+  {name:'Beaconhouse School Chakwal', lat:32.9330, lng:72.8570},
+  {name:'The City School Chakwal', lat:32.9345, lng:72.8600},
+  {name:'Dar-e-Arqam School Chakwal', lat:32.9335, lng:72.8585},
+
+  // Okara Schools
+  {name:'Okara Grammar School', lat:30.8080, lng:73.4500},
+  {name:'Roots International Okara', lat:30.8085, lng:73.4510},
+  {name:'Beaconhouse School Okara', lat:30.8075, lng:73.4490},
+  {name:'The City School Okara', lat:30.8090, lng:73.4520},
+  {name:'Dar-e-Arqam School Okara', lat:30.8082, lng:73.4505},
+
+  // Sheikhupura Schools
+  {name:'Sheikhupura Grammar School', lat:31.7131, lng:73.9783},
+  {name:'Roots International Sheikhupura', lat:31.7140, lng:73.9790},
+  {name:'Beaconhouse School Sheikhupura', lat:31.7130, lng:73.9770},
+  {name:'The City School Sheikhupura', lat:31.7150, lng:73.9800},
+  {name:'Dar-e-Arqam School Sheikhupura', lat:31.7135, lng:73.9785}
+];
+
+schools.forEach(function(school){
+  L.marker([school.lat, school.lng])
+    .addTo(map)
+    .bindPopup('<strong>' + school.name + '</strong>');
+});
+
+/* =====================
+   FOCUS MAP ON CLICK
+===================== */
+function focusMap(lat,lng,name){
+  map.setView([lat,lng],15);
+  L.popup()
+    .setLatLng([lat,lng])
+    .setContent('<strong>' + name + '</strong>')
+    .openOn(map);
+}
+
+// CATEGORY FILTER
+function filterCategory(category) {
+  document.querySelectorAll(".faq-tabs button").forEach(btn => btn.classList.remove("active"));
+  event.target.classList.add("active");
+
+  document.querySelectorAll(".faq-item").forEach(item => {
+    item.style.display =
+      category === "All" || item.dataset.category === category ? "block" : "none";
+  });
+}
+document.getElementById("searchInput").addEventListener("keyup", function () {
+  let searchValue = this.value.toLowerCase();
+  let cards = document.querySelectorAll(".school-card");
+
+  cards.forEach(function (card) {
+    let text = card.innerText.toLowerCase();
+
+    if (text.includes(searchValue)) {
+      card.style.display = "block";
+    } else {
+      card.style.display = "none";
+    }
+  });
+});
+</script>
+<script src="mobile-nav.js"></script>
+</body>
+</html>
